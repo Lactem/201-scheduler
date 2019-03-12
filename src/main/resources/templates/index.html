@@ -1,0 +1,14 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Getting Started: Serving Web Content</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+    <p th:text="'Welcome to the homepage of 201-scheduler, ' + ${name} + '!'" />
+    <p>Navigate to localhost:8080?name=MyName to see how Thymeleaf responds to changes.</p>
+    <p>Also try out the /user endpoint - navigate to localhost:8080/user to see a list of all users. <br />
+    Then navigate to localhost:8080/user/ttrojan@usc.edu to search for the user with the email address "ttrojan@usc.edu" <br />
+    Finally, try searching for a user that doesn't exist by navigating to localhost:8080/user/fakeEmail.</p>
+</body>
+</html>
