@@ -1,4 +1,4 @@
-package scheduler.controller.user;
+package scheduler.api.user;
 
 public class UserNotFoundException extends RuntimeException {
 	private static final long serialVersionUID = 1L;

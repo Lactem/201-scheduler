@@ -1,14 +1,26 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Getting Started: Serving Web Content</title>
+    <title>201-scheduler</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body>
+	<p th:text="'User Id: ' + ${webVisitor.id}" />
     <p th:text="'Welcome to the homepage of 201-scheduler, ' + ${name} + '!'" />
     <p>Navigate to localhost:8080?name=MyName to see how Thymeleaf responds to changes.</p>
-    <p>Also try out the /user endpoint - navigate to localhost:8080/user to see a list of all users. <br />
-    Then navigate to localhost:8080/user/ttrojan@usc.edu to search for the user with the email address "ttrojan@usc.edu" <br />
-    Finally, try searching for a user that doesn't exist by navigating to localhost:8080/user/fakeEmail.</p>
+    <p>Also try out the /user endpoint - navigate to localhost:8080/api/user to see a list of all users. <br />
+    Then navigate to localhost:8080/api/user/ttrojan@usc.edu to search for the user with the email address "ttrojan@usc.edu" <br />
+    Finally, try searching for a user that doesn't exist by navigating to localhost:8080/api/user/fakeEmail.</p>
+    
+    <br /><br /><br />
+    <form action="/user/login" method="POST">
+    	<input type="text" name="email" /><br />
+    	<input type="password" name="password" /><br />
+    	<input type="submit" value="Login" />
+    </form>
+    
+    <br />
+    <p th:if="${loginErr}">Error logging in: <span th:text="${loginErr}"></span></p>
+    <p th:if="${webVisitor.loggedIn}">You're logged in as <span th:text="${webVisitor.user.email}"></span></p>
 </body>
 </html>

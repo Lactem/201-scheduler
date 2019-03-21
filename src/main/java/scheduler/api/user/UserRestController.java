@@ -1,4 +1,4 @@
-package scheduler.controller.user;
+package scheduler.api.user;
 
 import java.util.List;
 
@@ -28,7 +28,7 @@ public class UserRestController {
 	/**
 	 *  Finds all users in the database.
 	 */
-	@GetMapping("/user")
+	@GetMapping("/api/user")
     List<User> getAllUsers() {
     	return userRepo.findAll();
     }
@@ -37,7 +37,7 @@ public class UserRestController {
 	 * Finds a user by their email address, or
 	 * throws an exception if no user exists with that email.
 	 */
-	@GetMapping("/user/{email}")
+	@GetMapping("/api/user/{email}")
 	User user(@PathVariable String email) {
 		return userRepo.findById(email)
 				.orElseThrow(() -> new UserNotFoundException(email));
@@ -46,7 +46,7 @@ public class UserRestController {
 	/**
 	 *  Creates a new user.
 	 */
-	@PostMapping("/user")
+	@PostMapping("/api/user")
 	User createUser(@RequestBody User newUser) {
 		return userRepo.save(newUser);
 	}
