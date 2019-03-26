@@ -12,6 +12,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import scheduler.WebVisitor;
+import scheduler.data.Calendar;
 import scheduler.data.User;
 
 @Controller
@@ -20,6 +21,61 @@ public class UserController {
 	
 	@Autowired
 	private RestTemplate restTemplate;
+
+	/**
+	 * Attempts to register (create) a new user.
+	 * 
+	 * @param email The email address that is logging in
+	 * @param password The password that is logging in
+	 * 
+	 * @return The homepage, with an error message if applicable.
+	 */
+	@RequestMapping(value="/user/register", method=RequestMethod.POST)
+	public String register(@RequestParam(name="email", required=true) String email,
+			@RequestParam(name="password", required=true) String password,
+			@RequestParam(name="confirmPassword", required=true) String confirmPassword,
+			@ModelAttribute("webVisitor") WebVisitor webVisitor,
+			Model model) {
+		model.addAttribute("registerEmail", email);
+		model.addAttribute("webVisitor", webVisitor);
+		
+		// Verify that the email address doesn't already exist
+		try {
+			restTemplate.getForObject("http://localhost:8080/api/user/" + email, User.class);
+			model.addAttribute("registerErr", "That email address is already associated with an account.");
+			return "index";
+		} catch (HttpClientErrorException.NotFound ignored) {}
+		
+		// Verify that the password isn't empty
+		if (password.trim().isEmpty()) {
+			model.addAttribute("registerErr", "Password is too short.");
+			return "index";
+		}
+		
+		// Verify that the password matches
+		if (!password.equals(confirmPassword)) {
+			model.addAttribute("registerErr", "Passwords don't match.");
+			return "index";
+		}
+		
+		// Create a new user
+		User user = new User(email, password);
+		user = restTemplate.postForObject("http://localhost:8080/api/user", user, User.class);
+		
+		// Log the user in
+		webVisitor.setUser(user);
+		
+		// If the user had a guest Calendar previously, it can now be saved permanently
+		if (webVisitor.getGuestCalendar() != null) {
+			Calendar calendar = webVisitor.getGuestCalendar();
+			calendar.setName("Calendar1");
+			calendar.setOwnerEmail(webVisitor.getUser().getEmail());
+			restTemplate.postForObject("http://localhost:8080/api/calendar/new", calendar, Calendar.class);
+			webVisitor.setGuestCalendar(null);
+		}
+		
+		return "index";
+	}
 	
 	/**
 	 * Attempts to log a user in.
@@ -34,6 +90,7 @@ public class UserController {
 			@RequestParam(name="password", required=true) String password,
 			@ModelAttribute("webVisitor") WebVisitor webVisitor,
 			Model model) {
+		model.addAttribute("loginEmail", email);
 		model.addAttribute("webVisitor", webVisitor);
 		
 		// Verify that the email address corresponds to an actual user

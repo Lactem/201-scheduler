@@ -1,14 +1,15 @@
 package scheduler.data;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import lombok.Builder;
 import lombok.Data;
 
 @Data
-@Builder
+@Builder(builderClassName="Builder")
 public class CalendarEvent {
-	private Date start; // When the event starts
-	private Date end; // When the event starts
+	private String title; // The name of the event
+	private LocalDateTime start; // When the event starts
+	private LocalDateTime end; // When the event starts
 	private String notes; // Any note about the event (e.g. its location or what to wear)
 }

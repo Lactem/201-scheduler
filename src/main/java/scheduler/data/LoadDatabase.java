@@ -26,7 +26,7 @@ public class LoadDatabase {
 	@Bean
 	CommandLineRunner populateCalendarDatabase(CalendarRepository repo) {
 		return args -> {
-			log.info("Preloading " + repo.save(new Calendar("ttrojan@usc.edu", new ArrayList<>(), new ArrayList<>())));
+			log.info("Preloading " + repo.save(new Calendar("School", "ttrojan@usc.edu", new ArrayList<>(), new ArrayList<>())));
 		};
 	}
 	

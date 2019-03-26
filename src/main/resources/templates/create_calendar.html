@@ -1,0 +1,36 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>201-scheduler - New Calendar</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+	<a th:href="@{/}">Home</a><br />
+	<label th:text="'User Id: ' + ${webVisitor.id}"></label><br /><br />
+	
+	<div id="newCalendar">
+		<form action="#" th:action="@{/calendar/new}" th:object="${calendar}" method="POST">
+    		Calendar Name <input type="text" th:field="*{name}" th:value="*{name}"/><br /><br />
+    		
+    		<b><label th:text="'Event #' + ${#lists.size(webVisitor.preCalendarEvents)+1}">Event</label></b><br />
+    		Event Name <input type="text" th:field="${event.title}" /><br />
+    		Start Time <input type="text" name="startTime" th:value="'1:30 PM'" /><br />
+    		End Time <input type="text" name="endTime" th:value="'3:00 PM'" /><br /><br />
+    		
+    		Week Of <input type="text" name="weekOf" th:value="${weekOf}" /><br /><br />
+    		On Days<br />
+    		Sunday <input type="checkbox" name="Sunday" value="T" /><br />
+    		Monday <input type="checkbox" name="Monday" value="T" /><br />
+    		Tuesday <input type="checkbox" name="Tuesday" value="T" /><br />
+    		Wednesday <input type="checkbox" name="Wednesday" value="T" /><br />
+    		Thursday <input type="checkbox" name="Thursday" value="T" /><br />
+    		Friday <input type="checkbox" name="Friday" value="T" /><br />
+    		Saturday <input type="checkbox" name="Saturday" value="T" /><br />
+    		
+    		<button type="submit" name="addEvent" th:text="'Add another event'"></button>
+    		
+    		<button type="submit" th:text="'Submit'"></button>
+    	</form>
+    </div>
+</body>
+</html>

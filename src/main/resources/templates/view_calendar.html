@@ -1,0 +1,24 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>201-scheduler - View Calendar</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+	<a th:href="@{/}">Home</a><br />
+	<label th:text="'User Id: ' + ${webVisitor.id}"></label><br /><br />
+	
+	<!-- DISPLAY THE CALENDAR IN A TABLE VIA THYMELEAF -->
+	<label th:text="'Events for calendar: ' + ${calendar.name}">Events</label>
+	<table>
+		<th:block th:each="event : ${calendar.events}">
+		<tr>
+			<td th:text="${event.title}"></td>
+			<td th:text="'Starts: ' + ${event.start}"></td>
+			<td th:text="'Ends: ' + ${event.end}"></td>
+			<td th:text="'Note: ' + ${event.notes}"></td>
+		</tr>
+		</th:block>
+	</table>
+</body>
+</html>

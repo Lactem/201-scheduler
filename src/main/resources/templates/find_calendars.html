@@ -5,6 +5,27 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body>
-    <p th:text="'User Id: ' + ${webVisitor.id}" />
+    <a th:href="@{/}">Home</a><br />
+	<label th:text="'User Id: ' + ${webVisitor.id}"></label><br /><br />
+	
+	<div id="findCalendars">
+		<p th:if="${#lists.isEmpty(calendars)}">No calendars were found.</p>
+		
+		<div id="showFoundCalendars" th:unless="${#lists.isEmpty(calendars)}">
+			<table>
+				<th:block th:each="calendar : ${calendars}">
+				<tr>
+					<td th:text="${calendar.name}"></td>
+					<td th:with="calendarId=${calendar.id}">
+						<form action="#" th:action="@{/calendar/view}" method="POST">
+							<input type="hidden" name="calendarId" th:value="${calendar.id}" />
+							<button type="submit" th:text="'View ' + ${calendar.name}">View Calendar</button>
+						</form>
+					</td>
+				</tr>
+				</th:block>
+			</table>
+		</div>
+	</div>
 </body>
 </html>

@@ -1,7 +1,5 @@
 package scheduler.api.user;
 
-import java.util.List;
-
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,7 +10,7 @@ import scheduler.data.User;
 import scheduler.data.UserRepository;
 
 /**
- * Handles REST API for the /user endpoint.
+ * Handles REST API for the /api/user endpoint.
  * Does not display any view data - only JSON.
  */
 @RestController
@@ -24,21 +22,13 @@ public class UserRestController {
 	UserRestController(UserRepository userRepo) {
 		this.userRepo = userRepo;
 	}
-	
-	/**
-	 *  Finds all users in the database.
-	 */
-	@GetMapping("/api/user")
-    List<User> getAllUsers() {
-    	return userRepo.findAll();
-    }
     
 	/**
 	 * Finds a user by their email address, or
 	 * throws an exception if no user exists with that email.
 	 */
 	@GetMapping("/api/user/{email}")
-	User user(@PathVariable String email) {
+	User findUser(@PathVariable String email) {
 		return userRepo.findById(email)
 				.orElseThrow(() -> new UserNotFoundException(email));
 	}

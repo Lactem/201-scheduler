@@ -1,40 +1,31 @@
 package scheduler;
 
+import java.util.List;
 import java.util.UUID;
 
+import lombok.Getter;
+import lombok.Setter;
 import scheduler.data.Calendar;
+import scheduler.data.CalendarEvent;
 import scheduler.data.User;
 
 public class WebVisitor {
-	private final UUID id;
-	private User user;
-	private Calendar guestCalendar; // Allow the user to create a calendar without logging on
+	private final @Getter UUID id;
+	private @Getter @Setter User user;
+	
+	// Allow the user to create a calendar without logging in
+	@Getter @Setter
+	private Calendar guestCalendar;
+	
+	// A list of events the user is creating before they're saved to a calendar
+	@Getter @Setter
+	private List<CalendarEvent> preCalendarEvents;
 	
 	public WebVisitor() {
 		id = UUID.randomUUID();
 	}
 	
-	public UUID getId() {
-		return id;
-	}
-	
-	public User getUser() {
-		return user;
-	}
-	
-	public void setUser(User user) {
-		this.user = user;
-	}
-	
 	public boolean isLoggedIn() {
 		return user != null;
-	}
-	
-	public Calendar getGuestCalendar() {
-		return guestCalendar;
-	}
-	
-	public void setGuestCalendar(Calendar guestCalendar) {
-		this.guestCalendar = guestCalendar;
 	}
 }
