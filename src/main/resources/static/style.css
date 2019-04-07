@@ -1,0 +1,69 @@
+body {
+	font-family: "Myriad Pro", Myriad, "Liberation Sans", "Nimbus Sans L", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+h4 {
+	font-family: "Myriad Pro", Myriad, "Liberation Sans", "Nimbus Sans L", "Helvetica Neue", Helvetica, Arial, sans-serif;
+	text-align: center;
+	font-size: 24px;
+	text-transform: none !important;
+	line-height: 0;
+	font-weight: normal;
+}
+
+input[type="text"] {
+	width: 100%;
+}
+
+input[type="email"] {
+	width: 100%;
+}
+
+input[type="password"] {
+	width: 100%;
+}
+
+input[type="submit"] {
+	float: center;
+	font-size: 14px;
+	border: 1px solid #55CC87; /*green*/
+	background-color: #55CC87; 
+	border-radius: 25px;
+}
+
+.homePage {
+	float: left;
+	width: 40%;
+	margin: 40px;
+}
+
+.createCalendar {
+	float: left;
+	width: 40%;
+	margin: 40px;
+}
+
+.findCalendar {
+	float: left;
+	width: 40%;
+	margin: 40px;
+}
+
+.loginRegister {
+	border: 1px solid #cbcbcb; /*light grey*/
+	background-color: #cbcbcb;
+	width: 30%;
+	height: 80%;
+	float: right;
+	border-radius: 25px;
+	padding: 40px;
+	margin: 40px;
+}
+
+#login {
+	display:none;
+}
+
+#register {
+	display:block;
+}
