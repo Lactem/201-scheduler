@@ -1,24 +1,31 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
+<link rel="stylesheet" type="text/css" href="style.css"/>
 <head>
     <title>201-scheduler</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body>
-	<a th:href="@{/}">Home</a><br />
-	<label th:text="'User Id: ' + ${webVisitor.id}"></label><br /><br />
-    <p th:text="'Welcome to the homepage of 201-scheduler, ' + ${name} + '!'" /><br />
 
+	<div id="homePage" class="homePage">
+		<!-- <a th:href="@{/}">Home</a><br /> -->
+		<label th:text="'User ID: ' + ${webVisitor.id}"></label>
+    	<p th:text="'Welcome to the homepage of 201-scheduler, ' + ${name} + '!'" />
+	</div>
+	
     <!-- REGISTER DEMO -->
     <br /><br /><br />
-    REGISTER DEMO
-    <form action="/user/register" method="POST">
-    	Email <input type="text" name="email" th:if="${registerEmail}" th:value="${registerEmail}"/>
-    	<input type="text" name="email" th:unless="${registerEmail}" th:placeholder="'your@email.com'"/><br />
-    	Password <input type="password" name="password" /><br />
-    	Confirm Password <input type="password" name="confirmPassword" /><br />
-    	<input type="submit" value="Register" />
-    </form>
+    <div id="register" class = "loginRegister">
+	    <h4>Sign Up! It's Free!</h4><br/>
+	    <form action="/user/register" method="POST">
+	    	Email<br/> <input type="text" name="email" width="48" th:if="${registerEmail}" th:value="${registerEmail}"/>
+	    	<input type="text" name="email" width="48" th:unless="${registerEmail}" th:placeholder="'your@email.com'"/><br /><br/>
+	    	Password <br/><input type="password" name="password" width="48"/><br /><br/>
+	    	Confirm Password <br/> <input type="password" name="confirmPassword" /><br /><br/>
+	    	<input style="float:center; text-align:center;" type="submit" value="Register" />
+	    </form>
+	    <p style="font-size:12px; text-align:center;">Already have an account? Log in <a href="#" onclick="swapRegLogin();">here!</a></p>
+    </div>
     
     <br />
     <p th:if="${registerErr}">Error logging in: <span th:text="${registerErr}"></span></p>
@@ -27,34 +34,52 @@
     
     <!-- LOGIN DEMO -->
     <br /><br />
-    LOGIN DEMO
-    <form action="/user/login" method="POST">
-    	Email <input type="text" name="email" th:if="${loginEmail}" th:value="${loginEmail}"/>
-    	<input type="text" name="email" th:unless="${loginEmail}" th:placeholder="'your@email.com'"/><br />
-    	Password <input type="password" name="password" /><br />
-    	<input type="submit" value="Login" />
-    </form>
+    <div id="login" class="loginRegister">
+	    <h4>Log In</h4><br/>
+	    <form action="/user/login" method="POST">
+	    	Email<br/> <input type="text" name="email" th:if="${loginEmail}" th:value="${loginEmail}"/>
+	    	<input type="text" name="email" th:unless="${loginEmail}" th:placeholder="'your@email.com'"/><br /><br/>
+	    	Password<br/> <input type="password" name="password" /><br /><br/>
+	    	<input type="submit" value="Login" />
+	    </form>
+	    <p style="font-size:12px; text-align: center;">Don't have an account? Register <a href="#" onclick="swapRegLogin();">here!</a></p>
+    </div>
     
-    <br />
+    <br/>
     <p th:if="${loginErr}">Error logging in: <span th:text="${loginErr}"></span></p>
     <p th:if="${webVisitor.loggedIn}">You're logged in as <span th:text="${webVisitor.user.email}"></span></p>
     <!-- END LOGIN DEMO -->
     
     
-    <!-- CREATE CALENDAR DEMO -->
-    <br /><br />
-    <a th:href="@{/calendar/new}">CREATE CALENDAR DEMO (MUST BE LOGGED IN)</a>
-    <!-- END CREATE CALENDAR DEMO -->
-    
     <!-- FIND CALENDAR DEMO -->
-    <br /><br /><br />
-    FIND CALENDAR DEMO (MUST BE LOGGED IN)
-    <form action="#" th:action="@{/calendar/find}" method="GET">
-    	Calendar Name (leave blank to find all) <input type="text" name="calendarName"/>
-    	<input type="submit" value="Find Calendar" />
-    </form>
+    <div class="findCalendar">
+	    <form action="#" th:action="@{/calendar/find}" method="GET">
+	    	<label for="findCal" style="font-size: 14px;">Calendar Name (leave blank to find all)</label>
+	    	<input type="text" style="width: 250px;" id="findCal" name="calendarName"/>
+	    	<input id="findCalendarSubmit" type="submit" value="Find Calendar" />
+	    	<!-- CREATE CALENDAR DEMO -->
+	    		<a class="createCalendar" th:href="@{/calendar/new}" style="text-decoration: none;">Create New Calendar</a>
+    		<!-- END CREATE CALENDAR DEMO -->
+	    </form>
+	</div>
     <!-- END FIND CALENDAR DEMO -->
-    <br />
     
+    
+    <script type="text/javascript">
+    	function swapRegLogin() {
+    		var reg = document.getElementById("register");
+    		var log = document.getElementById("login");
+    		if(reg.style.display == "block") {
+    			reg.style.display = "none";
+    			log.style.display = "block";
+    		}
+    		else {
+    			reg.style.display = "block";
+    			log.style.display = "none";
+    		}
+    	}
+    	
+    	
+    </script>
 </body>
 </html>
