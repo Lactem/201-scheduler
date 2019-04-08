@@ -11,6 +11,10 @@ h4 {
 	font-weight: normal;
 }
 
+label {
+	display: block;
+}
+
 input[type="text"] {
 	width: 100%;
 }
@@ -24,35 +28,53 @@ input[type="password"] {
 }
 
 input[type="submit"] {
+	display: block;
 	float: center;
-	font-size: 14px;
+	font-size: 16px;
 	border: 1px solid #55CC87; /*green*/
 	background-color: #55CC87; 
 	border-radius: 25px;
+	margin: 0 auto;
+	padding: 15px;
 }
 
 .homePage {
 	float: left;
 	width: 40%;
 	margin: 40px;
+	font-size: 14px;
 }
 
 .createCalendar {
+	display:inline;
 	float: left;
-	width: 40%;
-	margin: 40px;
+	font-size: 16px;
+	border: 1px solid #BA8EDD; /*light purple*/
+	background-color: #BA8EDD;
+	border-radius: 20px;
+	padding: 7px;
 }
 
 .findCalendar {
-	float: left;
-	width: 40%;
-	margin: 40px;
+	display: inline-block;
+	width: 50%;
+	float:left;
+	margin-left: 40px;
+}
+
+#findCalendarSubmit {
+	display: inline;
+	font-size: 16px;
+	border: 1px solid #ba8edd; /*light purple*/
+	background-color: #ba8edd;
+	border-radius: 20px;
+	padding: 7px;
 }
 
 .loginRegister {
 	border: 1px solid #cbcbcb; /*light grey*/
 	background-color: #cbcbcb;
-	width: 30%;
+	width: 25%;
 	height: 80%;
 	float: right;
 	border-radius: 25px;
