@@ -1,5 +1,6 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
+<link rel="stylesheet" type="text/css" href="/createCalStyle.css"/>
 <head>
     <title>201-scheduler - New Calendar</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -9,28 +10,57 @@
 	<label th:text="'User Id: ' + ${webVisitor.id}"></label><br /><br />
 	
 	<div id="newCalendar">
-		<form action="#" th:action="@{/calendar/new}" th:object="${calendar}" method="POST">
-    		Calendar Name <input type="text" th:field="*{name}" th:value="*{name}"/><br /><br />
-    		
-    		<b><label th:text="'Event #' + ${#lists.size(webVisitor.preCalendarEvents)+1}">Event</label></b><br />
-    		Event Name <input type="text" th:field="${event.title}" /><br />
-    		Start Time <input type="text" name="startTime" th:value="'1:30 PM'" /><br />
-    		End Time <input type="text" name="endTime" th:value="'3:00 PM'" /><br /><br />
+		<h4>Create New Calendar</h4>
+		<form action="#" id="newCalForm" th:action="@{/calendar/new}" th:object="${calendar}" method="POST">
+		Calendar Name <input type="text" th:field="*{name}" th:value="*{name}"/><br /><br />
+		<div id="calEvent" class="calEvent">
+			<b><label th:text="'Event #' + ${#lists.size(webVisitor.preCalendarEvents)+1}">Event</label></b><br />
+    		<label for="eventName">Event Name</label> 
+    		<input id="eventName" type="text" th:field="${event.title}" /><br />
+    		<label for="startTime">Start Time</label>
+    		<input id="startTime" type="text" name="startTime" th:value="'1:30 PM'" /><br />
+    		<label for="endTime">End Time</label>
+    		<input id="endTime" type="text" name="endTime" th:value="'3:00 PM'" /><br /><br />
     		
     		Week Of <input type="text" name="weekOf" th:value="${weekOf}" /><br /><br />
     		On Days<br />
-    		Sunday <input type="checkbox" name="Sunday" value="T" /><br />
-    		Monday <input type="checkbox" name="Monday" value="T" /><br />
-    		Tuesday <input type="checkbox" name="Tuesday" value="T" /><br />
-    		Wednesday <input type="checkbox" name="Wednesday" value="T" /><br />
-    		Thursday <input type="checkbox" name="Thursday" value="T" /><br />
-    		Friday <input type="checkbox" name="Friday" value="T" /><br />
-    		Saturday <input type="checkbox" name="Saturday" value="T" /><br />
-    		
-    		<button type="submit" name="addEvent" th:text="'Add another event'"></button>
-    		
+    		<input type="checkbox" name="Sunday" value="T" />Sunday<br />
+    		<input type="checkbox" name="Monday" value="T" />Monday<br />
+    		<input type="checkbox" name="Tuesday" value="T" />Tuesday<br />
+    		<input type="checkbox" name="Wednesday" value="T" />Wednesday<br />
+    		<input type="checkbox" name="Thursday" value="T" />Thursday<br />
+    		<input type="checkbox" name="Friday" value="T" />Friday<br />
+    		<input type="checkbox" name="Saturday" value="T" />Saturday<br /><br/>
+		</div>
+    		<button type="button" name="addAnotherEvent" th:text="'Add another event'" onclick="addEvent()"></button>
     		<button type="submit" th:text="'Submit'"></button>
     	</form>
     </div>
+    
+    <script type="text/javascript">
+    	function addEvent() {
+    		console.log("HI IM IN ADD EVENT ()");
+    		var html = document.createElement('div');
+    		var numEvent = "${#lists.size(webVisitor.preCalendarEvents)+1}";
+    		html.innerHTML = "<b><label th:text=\"'Event # ' + " + numEvent + "\">Event</label></b><br /> \
+	    		<label for='eventName'>Event Name</label> \
+	    		<input id='eventName' type='text' th:field='${event.title}' /><br /> \
+	    		<label for='startTime'>Start Time</label> \
+	    		<input id='startTime' type='text' name='startTime' th:value=\"'1:30 PM'\" /><br /> \
+	    		<label for='endTime'>End Time</label> \
+	    		<input id='endTime' type='text' name='endTime' th:value=\"'3:00 PM'\" /><br /><br /> \
+	    		\
+	    		Week Of <input type=\"text\" name=\"weekOf\" th:value=\"${weekOf}\" /><br /><br /> \
+	    		On Days<br />\
+	    		<input type=\"checkbox\" name=\"Sunday\" value=\"T\" />Sunday<br /> \
+	    		<input type=\"checkbox\" name=\"Monday\" value=\"T\" />Monday<br /> \
+	    		<input type=\"checkbox\" name=\"Tuesday\" value=\"T\" />Tuesday<br /> \
+	    		<input type=\"checkbox\" name=\"Wednesday\" value=\"T\" />Wednesday<br /> \
+	    		<input type=\"checkbox\" name=\"Thursday\" value=\"T\" />Thursday<br /> \
+	    		<input type=\"checkbox\" name=\"Friday\" value=\"T\" />Friday<br /> \
+	    		<input type=\"checkbox\" name=\"Saturday\" value=\"T\" />Saturday<br /><br/>";
+    		document.getElementById("calEvent").appendChild(html);
+    	}
+    </script>
 </body>
 </html>
