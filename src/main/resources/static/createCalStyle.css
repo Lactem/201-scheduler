@@ -1,0 +1,29 @@
+body {
+	font-family: "Myriad Pro", Myriad, "Liberation Sans", "Nimbus Sans L", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+h4 {
+	font-size: 20px;
+	text-transform: none;
+	line-height: 0px;
+	padding-top: none;
+	margin: none;
+}
+
+#newCalendar {
+	border: 3px solid #cbcbcb; /*light grey*/
+	background-color: white;
+	margin-left: 20px;
+	margin-top: 20px;
+	padding-top: 20px;
+	padding-bottom: 40px;
+	padding-left: 40px;
+	padding-right: 40px;
+	width: 30%;
+}
+
+
+input[type="text"] {
+	width: 100%;
+	float: center;
+}
