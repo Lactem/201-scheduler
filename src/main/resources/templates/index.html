@@ -4,6 +4,18 @@
 <head>
     <title>201-scheduler</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script type="text/javascript">
+    	function swapRegLogin() {
+    		if ($("#login").is(":visible")) {
+    			$("#login").hide();
+    			$("#register").show();
+    		} else if ($("#register").is(":visible")) {
+    			$("#register").hide();
+    			$("#login").show();
+    		}
+    	}
+    </script>
 </head>
 <body>
 
@@ -63,23 +75,5 @@
 	    </form>
 	</div>
     <!-- END FIND CALENDAR DEMO -->
-    
-    
-    <script type="text/javascript">
-    	function swapRegLogin() {
-    		var reg = document.getElementById("register");
-    		var log = document.getElementById("login");
-    		if(reg.style.display == "block") {
-    			reg.style.display = "none";
-    			log.style.display = "block";
-    		}
-    		else {
-    			reg.style.display = "block";
-    			log.style.display = "none";
-    		}
-    	}
-    	
-    	
-    </script>
 </body>
 </html>
