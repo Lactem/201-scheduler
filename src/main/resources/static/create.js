@@ -55,13 +55,13 @@ function validateEvent(div) {
 			'startTime': div.children('input[name="startTime"]').val(),
 			'endTime': div.children('input[name="endTime"]').val(),
 			'weekOf': div.children('input[name="weekOf"]').val(),
-			'sunday': div.children('input[name="Sunday"]').is(":checked"),
 			'monday': div.children('input[name="Monday"]').is(":checked"),
 			'tuesday': div.children('input[name="Tuesday"]').is(":checked"),
 			'wednesday': div.children('input[name="Wednesday"]').is(":checked"),
 			'thursday': div.children('input[name="Thursday"]').is(":checked"),
 			'friday': div.children('input[name="Friday"]').is(":checked"),
 			'saturday': div.children('input[name="Saturday"]').is(":checked"),
+			'sunday': div.children('input[name="Sunday"]').is(":checked"),
 			'notes': div.children('input[name="notes"]').val()
 		};
 	console.log('printing eventData...');
@@ -78,9 +78,7 @@ function sendNewCalendar() {
 	}
 }
 
-$(document).ready(function() {
-	connect();
-});
+$(document).ready(connect());
 
 $(function () {
     $("form").on('submit', function (e) {
@@ -102,13 +100,13 @@ $(function () {
     		\
     		Week Of <input type=\"text\" name=\"weekOf\" value=\"" + $("#weekOf").val() + "\" /><br /><br /> \
     		On Days<br />\
-    		<input type=\"checkbox\" name=\"Sunday\" value=\"T\" />Sunday<br /> \
-    		<input type=\"checkbox\" name=\"Monday\" value=\"T\" />Monday<br /> \
-    		<input type=\"checkbox\" name=\"Tuesday\" value=\"T\" />Tuesday<br /> \
-    		<input type=\"checkbox\" name=\"Wednesday\" value=\"T\" />Wednesday<br /> \
-    		<input type=\"checkbox\" name=\"Thursday\" value=\"T\" />Thursday<br /> \
-    		<input type=\"checkbox\" name=\"Friday\" value=\"T\" />Friday<br /> \
-    		<input type=\"checkbox\" name=\"Saturday\" value=\"T\" />Saturday<br /><br/> \
+    		<input type='checkbox' name='Monday' />Monday<br /> \
+    		<input type='checkbox' name='Tuesday' />Tuesday<br /> \
+    		<input type='checkbox' name='Wednesday' />Wednesday<br /> \
+    		<input type='checkbox' name='Thursday' />Thursday<br /> \
+    		<input type='checkbox' name='Friday' />Friday<br /> \
+    		<input type='checkbox' name='Saturday' />Saturday<br /> \
+    		<input type='checkbox' name='Sunday' />Sunday<br /><br /> \
     		<label for='notes'>Notes</label> \
     		<input type='text' name='notes' value='Note to self...' /><br /><br />";
 		html += "</div>";
