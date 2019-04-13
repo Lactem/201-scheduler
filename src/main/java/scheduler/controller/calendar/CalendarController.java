@@ -1,6 +1,5 @@
 package scheduler.controller.calendar;
 
-import java.math.BigInteger;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -13,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -23,6 +24,12 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.client.RestTemplate;
 
 import scheduler.WebVisitor;
+import scheduler.controller.calendar.message.CreateMessage;
+import scheduler.controller.calendar.message.CreateMessageResponse;
+import scheduler.controller.calendar.message.UpdateMessage;
+import scheduler.controller.calendar.message.UpdateMessageResponse;
+import scheduler.controller.calendar.message.ValidateMessage;
+import scheduler.controller.calendar.message.ValidateMessageResponse;
 import scheduler.data.Calendar;
 import scheduler.data.CalendarEvent;
 
@@ -201,8 +208,8 @@ public class CalendarController {
 	}
 	
 	@RequestMapping(value= "/calendar/view", method=RequestMethod.POST)
-	public String findCalendars(@ModelAttribute("webVisitor") WebVisitor webVisitor,
-			@RequestParam("calendarId") BigInteger calendarId,
+	public String viewCalendar(@ModelAttribute("webVisitor") WebVisitor webVisitor,
+			@RequestParam("calendarId") String calendarId,
 			Model model) {
 		model.addAttribute("webVisitor", webVisitor);
 		model.addAttribute("calendar", restTemplate.getForObject("http://localhost:8080/api/calendar/id/" + calendarId, Calendar.class));
@@ -210,18 +217,108 @@ public class CalendarController {
 		return "view_calendar";
 	}
 	
-	/**
-	 * Tries to edit a calendar
-	 * @param webVisitor
-	 * @param calendar
-	 * @param model
-	 * @return
-	 */
-	@RequestMapping(value="/calendar/submitChanges", method=RequestMethod.POST)
-	public String submitChanges(@ModelAttribute("webVisitor") WebVisitor webVisitor,
-			@RequestParam(name="calendar", required=true) Calendar calendar,
+	@RequestMapping(value= "/calendar/edit", method=RequestMethod.POST)
+	public String editCalendar(@ModelAttribute("webVisitor") WebVisitor webVisitor,
+			@RequestParam("calendarId") String calendarId,
 			Model model) {
 		model.addAttribute("webVisitor", webVisitor);
+		model.addAttribute("calendar", restTemplate.getForObject("http://localhost:8080/api/calendar/id/" + calendarId, Calendar.class));
+		
 		return "edit_calendar";
+	}
+	
+	/**
+	 * Listens for a STOMP message to validate a calendar event.
+	 */
+	@MessageMapping("/calendar/validate")
+	@SendTo("/topic/calendarValidateResponse")
+	public ValidateMessageResponse validateEvent(ValidateMessage validate) {
+		// Use the time info to create a LocalDate object for the week the event will occur
+		int weekOfMonth = Integer.valueOf(validate.getWeekOf().split("/")[0]);
+		int weekOfDay = Integer.valueOf(validate.getWeekOf().split("/")[1]);
+		int weekOfYear = Integer.valueOf(validate.getWeekOf().split("/")[2]);
+		LocalDate weekOfDate = LocalDate.of(weekOfYear, weekOfMonth, weekOfDay);
+		
+		// Use the time info to create a LocalTime object for start and end
+		String startTimeHour = validate.getStartTime().split(":")[0];
+		String startTimeMin = validate.getStartTime().split(":")[1].split(" ")[0];
+		String startTimeDayTime = validate.getStartTime().split(":")[1].split(" ")[1].toLowerCase();
+		String endTimeHour = validate.getEndTime().split(":")[0];
+		String endTimeMin = validate.getEndTime().split(":")[1].split(" ")[0];
+		String endTimeDayTime = validate.getEndTime().split(":")[1].split(" ")[1].toLowerCase();
+		LocalTime start = LocalTime.of(Integer.valueOf(startTimeHour) + (startTimeDayTime.equals("pm") ? 12 : 0),
+				Integer.valueOf(startTimeMin));
+		LocalTime end = LocalTime.of(Integer.valueOf(endTimeHour) + (endTimeDayTime.equals("pm") ? 12 : 0),
+				Integer.valueOf(endTimeMin));
+		
+		// Create a new event for each date (TODO: This can be cleaned up by taking a difference of dates)
+		List<LocalDate> dates = new ArrayList<>();
+		if (validate.isSunday()) {
+			dates.add(weekOfDate);
+		}
+		if (validate.isMonday()) {
+			dates.add(weekOfDate.plusDays(1));
+		}
+		if (validate.isTuesday()) {
+			dates.add(weekOfDate.plusDays(2));
+		}
+		if (validate.isWednesday()) {
+			dates.add(weekOfDate.plusDays(3));
+		}
+		if (validate.isThursday()) {
+			dates.add(weekOfDate.plusDays(4));
+		}
+		if (validate.isFriday()) {
+			dates.add(weekOfDate.plusDays(5));
+		}
+		if (validate.isSaturday()) {
+			dates.add(weekOfDate.plusDays(6));
+		}
+		List<CalendarEvent> events = new ArrayList<>();
+		for (LocalDate date : dates) {
+			// Add the event to the user's session
+			CalendarEvent event = CalendarEvent.builder().title(validate.getTitle())
+					.start(LocalDateTime.of(date, start))
+					.end(LocalDateTime.of(date, end))
+					.notes(validate.getNotes())
+					.build();
+			events.add(event);
+		}
+		return new ValidateMessageResponse(events);
+	}
+	
+	/**
+	 * Listens for a STOMP message to create a new calendar.
+	 */
+	@MessageMapping("/calendar/create")
+	@SendTo("/topic/calendarCreateResponse")
+	public CreateMessageResponse createCalendar(CreateMessage create) {
+		// Create a new calendar
+		Calendar calendar = new Calendar();
+		calendar.setName(create.getName());
+		calendar.setOwnerEmail(create.getOwnerEmail());
+		calendar.setEvents(create.getEvents());
+		calendar.setEditorEmails(new ArrayList<>());
+		
+		// Save the new calendar
+		calendar = restTemplate.postForObject("http://localhost:8080/api/calendar/new", calendar, Calendar.class);
+		
+		return new CreateMessageResponse(calendar.getId(), "OK");
+	}
+	
+	/**
+	 * Listens for a STOMP message to edit a calendar by saving its list of events (other info can't be edited).
+	 */
+	@MessageMapping("/calendar/submitChanges")
+	@SendTo("/topic/calendarChanges")
+	public UpdateMessageResponse submitChanges(UpdateMessage changes) {
+		System.out.println("updating calendar with id: " + changes.getCalendarId());
+		Calendar calendar = restTemplate.getForObject("http://localhost:8080/api/calendar/id/" + changes.getCalendarId(), Calendar.class);
+		System.out.println("fetched the calendar to update: " + calendar);
+		calendar.setEvents(new ArrayList<>());
+		// TODO: Handle conflicts - decide if the changes are accepted or rejected
+		restTemplate.put("http://localhost:8080/api/calendar/updateEvents/" + calendar.getId(), changes.getUpdatedEvents());
+		return new UpdateMessageResponse(calendar);
+		// TODO: Make sure everyone subscribed to topic/calendarChanges gets this update and modifies their page
 	}
 }

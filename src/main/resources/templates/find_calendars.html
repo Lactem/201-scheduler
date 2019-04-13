@@ -21,6 +21,10 @@
 							<input type="hidden" name="calendarId" th:value="${calendar.id}" />
 							<button type="submit" th:text="'View ' + ${calendar.name}">View Calendar</button>
 						</form>
+						<form action="#" th:action="@{/calendar/edit}" method="POST">
+							<input type="hidden" name="calendarId" th:value="${calendar.id}" />
+							<button type="submit" th:text="'Edit ' + ${calendar.name}">Edit Calendar</button>
+						</form>
 					</td>
 				</tr>
 				</th:block>

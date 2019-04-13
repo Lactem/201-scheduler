@@ -1,6 +1,5 @@
 package scheduler.api.calendar;
 
-import java.math.BigInteger;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -44,7 +43,7 @@ public class CalendarRestController {
 	 * Finds a a calendar by its id.
 	 */
 	@GetMapping("/api/calendar/id/{id}")
-	Calendar findCalendar(@PathVariable BigInteger id) {
+	Calendar findCalendar(@PathVariable String id) {
 		return calendarRepo.findAll().stream()
 				.filter(calendar -> calendar != null && calendar.getId().equals(id))
 				.findFirst().get();
@@ -62,7 +61,7 @@ public class CalendarRestController {
 	 * Updates the list of users who are allowed to edit a calendar with the given identifier.
 	 */
 	@PutMapping("/api/calendar/updateEditors/{id}")
-	Optional<Calendar> updateEditors(@RequestBody List<String> editorEmails, @PathVariable BigInteger id) {
+	Optional<Calendar> updateEditors(@RequestBody List<String> editorEmails, @PathVariable String id) {
 		
 		return calendarRepo.findById(id)
 			.map(calendar -> {
@@ -75,7 +74,7 @@ public class CalendarRestController {
 	 * Updates the list of events in a calendar with the given identifier.
 	 */
 	@PutMapping("/api/calendar/updateEvents/{id}")
-	Optional<Calendar> updateEvents(@RequestBody List<CalendarEvent> events, @PathVariable BigInteger id) {
+	Optional<Calendar> updateEvents(@RequestBody List<CalendarEvent> events, @PathVariable String id) {
 		
 		return calendarRepo.findById(id)
 			.map(calendar -> {

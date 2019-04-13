@@ -49,13 +49,13 @@ public class UserController {
 		// Verify that the password isn't empty
 		if (password.trim().isEmpty()) {
 			model.addAttribute("registerErr", "Password is too short.");
-			return "index";
+			return "redirect:/index";
 		}
 		
 		// Verify that the password matches
 		if (!password.equals(confirmPassword)) {
 			model.addAttribute("registerErr", "Passwords don't match.");
-			return "index";
+			return "redirect:/index";
 		}
 		
 		// Create a new user
@@ -74,7 +74,7 @@ public class UserController {
 			webVisitor.setGuestCalendar(null);
 		}
 		
-		return "index";
+		return "redirect:/index";
 	}
 	
 	/**
@@ -99,19 +99,19 @@ public class UserController {
 			user = restTemplate.getForObject("http://localhost:8080/api/user/" + email, User.class);
 		} catch (HttpClientErrorException.NotFound userNotFoundEx) {
 			model.addAttribute("loginErr", "No account associated with that email address exists.");
-			return "index";
+			return "redirect:/index";
 		}
 		
 		// Verify that the password matches
 		if (!user.getPassword().equals(password)) {
 			model.addAttribute("loginErr", "Incorrect password.");
-			return "index";
+			return "redirect:/index";
 		}
 		
 		// Log the user in
 		webVisitor.setUser(user);
 		
-		return "index";
+		return "redirect:/index";
 	}
 	
 	// Creates a new user when logging in without any JSESSIONID cookie
