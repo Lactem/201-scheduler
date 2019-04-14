@@ -32,11 +32,7 @@ public class ValidateMessage {
 	private String notes;
 	
 	public static List<CalendarEvent> toEvents(ValidateMessage validate) {
-		// Use the time info to create a LocalDate object for the week the event will occur
-		int day = Integer.valueOf(validate.getWeekOf().split("/")[0]);
-		int month = Integer.valueOf(validate.getWeekOf().split("/")[1]);
-		int year = Integer.valueOf(validate.getWeekOf().split("/")[2]);
-		LocalDate weekOfDate = LocalDate.of(year, month, day);
+		LocalDate weekOfDate = ValidateMessage.strToDate(validate.getWeekOf());
 		
 		// Use the time info to create a LocalTime object for start and end
 		String startTimeHour = validate.getStartTime().split(":")[0];
@@ -86,5 +82,15 @@ public class ValidateMessage {
 		}
 		
 		return events;
+	}
+	
+	/**
+	 * Takes a string of the format DD/MM/YYYY and converts it to a LocalDate object.
+	 */
+	public static LocalDate strToDate(String str) {
+		int day = Integer.valueOf(str.split("/")[0]);
+		int month = Integer.valueOf(str.split("/")[1]);
+		int year = Integer.valueOf(str.split("/")[2]);
+		return LocalDate.of(year, month, day);
 	}
 }

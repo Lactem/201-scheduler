@@ -1,5 +1,6 @@
 package scheduler.controller.calendar;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +26,10 @@ import scheduler.controller.calendar.message.UpdateMessage;
 import scheduler.controller.calendar.message.UpdateMessageResponse;
 import scheduler.controller.calendar.message.ValidateMessage;
 import scheduler.controller.calendar.message.ValidateMessageResponse;
+import scheduler.controller.calendar.message.ViewMessage;
+import scheduler.controller.calendar.message.ViewMessageResponse;
 import scheduler.data.Calendar;
+import scheduler.data.CalendarEvent;
 
 /**
  * /calendar/new: Creating a new calendar (create_calendar.html).
@@ -78,7 +82,13 @@ public class CalendarController {
 			@RequestParam("calendarId") String calendarId,
 			Model model) {
 		model.addAttribute("webVisitor", webVisitor);
-		model.addAttribute("calendar", restTemplate.getForObject("http://localhost:8080/api/calendar/id/" + calendarId, Calendar.class));
+		model.addAttribute("viewedCalendar", restTemplate.getForObject("http://localhost:8080/api/calendar/id/" + calendarId, Calendar.class));
+		ResponseEntity<List<Calendar>> userCalendars = restTemplate.exchange(
+				"http://localhost:8080/api/calendar/email/" + webVisitor.getUser().getEmail(),
+				HttpMethod.GET,
+				null,
+				new ParameterizedTypeReference<List<Calendar>>(){});
+		model.addAttribute("allCalendars", userCalendars.getBody());
 		
 		return "view_calendar";
 	}
@@ -137,5 +147,28 @@ public class CalendarController {
 		// TODO: Handle conflicts - decide if the changes are accepted or rejected
 		restTemplate.put("http://localhost:8080/api/calendar/updateEvents/" + calendar.getId(), calendar.getEvents());
 		return new UpdateMessageResponse(calendar);
+	}
+	
+	/**
+	 * Listens for a STOMP message requesting a list of events for a given week.
+	 */
+	@MessageMapping("/calendar/viewWeek")
+	@SendTo("/topic/viewWeek")
+	public ViewMessageResponse viewEvents(ViewMessage message) {
+		List<CalendarEvent> events = new ArrayList<>();
+		LocalDateTime weekStart = ValidateMessage.strToDate(message.getWeekOf()).atStartOfDay();
+		LocalDateTime weekEnd = weekStart.plusDays(7);
+		
+		// Get the events for the week for each calendar requested
+		for (String calendarId : message.getCalendarIds()) {
+			Calendar calendar = restTemplate.getForObject("http://localhost:8080/api/calendar/id/" + calendarId, Calendar.class);
+			for (CalendarEvent event : calendar.getEvents()) {
+				if (event.getStart().isAfter(weekStart) && event.getStart().isBefore(weekEnd)) {
+					events.add(event);
+				}
+			}
+		}
+		
+		return new ViewMessageResponse(events);
 	}
 }

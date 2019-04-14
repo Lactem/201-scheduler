@@ -3,22 +3,34 @@
 <head>
     <title>201-scheduler - View Calendar</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <script src="/webjars/jquery/jquery.min.js"></script>
+    <script src="/webjars/sockjs-client/sockjs.min.js"></script>
+    <script src="/webjars/stomp-websocket/stomp.min.js"></script>
+    <script src="/webjars/momentjs/moment.js"></script>
+    <script th:inline="javascript">
+    	var viewedCalendar = /*[[${viewedCalendar}]]*/ null;
+    	var allCalendars = /*[[${allCalendars}]]*/ null;
+    </script>
+    <script th:src="@{/view.js}"></script>
 </head>
 <body>
+<noscript><h2 style="color: #ff0000">Seems your browser doesn't support Javascript! Websocket relies on Javascript being
+    enabled. Please enable
+    Javascript and reload this page!</h2>
+</noscript>
 	<a th:href="@{/}">Home</a><br />
 	<label th:text="'User Id: ' + ${webVisitor.id}"></label><br /><br />
 	
 	<!-- DISPLAY THE CALENDAR IN A TABLE VIA THYMELEAF -->
-	<label th:text="'Events for calendar: ' + ${calendar.name}">Events</label>
-	<table>
-		<th:block th:each="event : ${calendar.events}">
-		<tr>
-			<td th:text="${event.title}"></td>
-			<td th:text="'Starts: ' + ${event.start}"></td>
-			<td th:text="'Ends: ' + ${event.end}"></td>
-			<td th:text="'Note: ' + ${event.notes}"></td>
-		</tr>
-		</th:block>
-	</table>
+	<div id="viewEvents"></div>
+	
+	<!-- CALENDAR VIEWING CONTROLS -->
+	<div id="controls">
+		<b><label for="viewingWeek">Viewing for the Week of</label></b><br />
+		<input type="text" name="viewingWeek" /><br /><br />
+		
+		<!-- JavaScript updates this with a list of calendars to choose from -->
+		<div id="selectCalendars"></div>
+	</div>
 </body>
 </html>
