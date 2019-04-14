@@ -1,8 +1,5 @@
 package scheduler.controller.calendar;
 
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,11 +45,6 @@ public class CalendarController {
 	@RequestMapping(value="/calendar/new", method=RequestMethod.GET)
 	public String newCalendarGet(@ModelAttribute("webVisitor") WebVisitor webVisitor, Model model) {
 		model.addAttribute("webVisitor", webVisitor);
-		
-		// When adding a new event, the user can select from days starting from the previous Monday
-		LocalDate previousMonday = LocalDate.now();
-		if (previousMonday.getDayOfWeek() != DayOfWeek.MONDAY) previousMonday = previousMonday.with(TemporalAdjusters.previous(DayOfWeek.MONDAY));
-		model.addAttribute("weekOf", previousMonday.getDayOfMonth() + "/" + previousMonday.getMonthValue() + "/" + previousMonday.getYear());
 		
 		return "create_calendar";
 	}
@@ -135,14 +127,12 @@ public class CalendarController {
 	@MessageMapping("/calendar/submitChanges")
 	@SendTo("/topic/calendarChanges")
 	public UpdateMessageResponse submitChanges(UpdateMessage changes) {
-		System.out.println("updating calendar with id: " + changes.getCalendarId());
 		Calendar calendar = restTemplate.getForObject("http://localhost:8080/api/calendar/id/" + changes.getCalendarId(), Calendar.class);
-		System.out.println("fetched the calendar to update: " + calendar);
-		System.out.println("#events before removing: " + calendar.getEvents().size());
-		calendar.getEvents().remove(changes.getEditedEventIndex());
-		System.out.println("#events after removing: " + calendar.getEvents().size());
-		calendar.getEvents().addAll(ValidateMessage.toEvents(changes.getEditedEvent()));
-		System.out.println("#events after adding: " + calendar.getEvents().size());
+		
+		// Remove the edited event (an "edited index" of -1 represents adding a new event)
+		if (changes.getEditedEventIndex() != -1) calendar.getEvents().remove(changes.getEditedEventIndex());
+		
+		if (!changes.isRemove()) calendar.getEvents().addAll(ValidateMessage.toEvents(changes.getEditedEvent()));
 		
 		// TODO: Handle conflicts - decide if the changes are accepted or rejected
 		restTemplate.put("http://localhost:8080/api/calendar/updateEvents/" + calendar.getId(), calendar.getEvents());

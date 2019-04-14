@@ -54,30 +54,43 @@ function refreshCalendar(updatedCalendar) {
 	// Display updated calendar
 	updatedHtml += "</tbody></table>";
     $("#displayCalendar").html(updatedHtml);
+    
+    // Clear the updates so the user isn't updating an old event
+    $("#editEvent").html('');
 }
 
-function saveChanges(eventIndex) {
-	var div = $("#editEvent");
-	var eventData = 
-	{
-		'title': div.children('input[name="title"]').val(),
-		'startTime': div.children('input[name="startTime"]').val(),
-		'endTime': div.children('input[name="endTime"]').val(),
-		'weekOf': div.children('input[name="weekOf"]').val(),
-		'monday': div.children('input[name="Monday"]').is(":checked"),
-		'tuesday': div.children('input[name="Tuesday"]').is(":checked"),
-		'wednesday': div.children('input[name="Wednesday"]').is(":checked"),
-		'thursday': div.children('input[name="Thursday"]').is(":checked"),
-		'friday': div.children('input[name="Friday"]').is(":checked"),
-		'saturday': div.children('input[name="Saturday"]').is(":checked"),
-		'sunday': div.children('input[name="Sunday"]').is(":checked"),
-		'notes': div.children('input[name="notes"]').val()
-	};
+/**
+ * Saves changes to an event
+ * @param eventIndex the index of the event being modified
+ * @param remove true to delete the event, false to just modify it
+ */
+function saveChanges(eventIndex, remove) {
+	// eventIndex of -1 indicates adding a new event. Any other number represents editing an existing event
+	var eventData = null;
+	if (!remove) {
+		var div = eventIndex == -1 ? $("#addEvent") : $("#editEvent");
+		eventData =
+		{
+				'title': div.children('input[name="title"]').val(),
+				'startTime': div.children('input[name="startTime"]').val(),
+				'endTime': div.children('input[name="endTime"]').val(),
+				'weekOf': div.children('input[name="weekOf"]').val(),
+				'monday': div.children('input[name="Monday"]').is(":checked"),
+				'tuesday': div.children('input[name="Tuesday"]').is(":checked"),
+				'wednesday': div.children('input[name="Wednesday"]').is(":checked"),
+				'thursday': div.children('input[name="Thursday"]').is(":checked"),
+				'friday': div.children('input[name="Friday"]').is(":checked"),
+				'saturday': div.children('input[name="Saturday"]').is(":checked"),
+				'sunday': div.children('input[name="Sunday"]').is(":checked"),
+				'notes': div.children('input[name="notes"]').val()
+		};
+	}
 
 	stompClient.send("/app/calendar/submitChanges", {}, JSON.stringify(
 			{
 				'calendarId': calendar.id,
 				'editedEventIndex': eventIndex,
+				'remove': remove,
 				'editedEvent': eventData
 			}));
 }
@@ -92,10 +105,10 @@ function editEvent(eventIndex) {
 	var weekDay = date.isoWeekday(); // 1-7 where 1 is Monday and 7 is Sunday
 	console.log(date);
 	console.log('weekDay: ' + weekDay);
-	var startTime = moment(event.start).format("h:m a").toUpperCase();
-	var endTime = moment(event.end).format("h:m a").toUpperCase();
+	var startTime = moment(event.start).format("h:mm a").toUpperCase();
+	var endTime = moment(event.end).format("h:mm a").toUpperCase();
 	
-	var html = "<b><label>Edit " + event.title + "</label></b><br /> \
+	var html = "<b><label>Edit Event</label></b><br /> \
 		<label for='eventName'>Event Name</label> \
 		<input type='text' name='title' value='" + event.title + "'/><br /> \
 		<label for='startTime'>Start Time</label> \
@@ -114,13 +127,44 @@ function editEvent(eventIndex) {
     	<input type='checkbox' name='Sunday'" + (weekDay == 7 ? "checked" : "") + " />Sunday<br /><br /> \
 		<label for='notes'>Notes</label> \
 		<input type='text' name='notes' value='Note to self...' /><br /><br /> \
-    	<button type='button' onclick='saveChanges(" + eventIndex + ");'>Save Changes</button>";
+    	<button type='button' onclick='saveChanges(" + eventIndex + ", false);'>Save Changes</button> \
+    	<button type='button' onclick='saveChanges(" + eventIndex + ", true);'>Delete Event</button>";
 	$("#editEvent").html(html);
+}
+
+function populateAddEvent() {
+	// Get the current week
+	var today = moment();
+	var weekOf = today.startOf('week').isoWeekday(1);
+	var weekOfStr = weekOf.format('D/M/YYYY');
+	
+	var html = "<b><label>Add New Event</label></b><br /> \
+		<label for='eventName'>Event Name</label> \
+		<input type='text' name='title'/><br /> \
+		<label for='startTime'>Start Time</label> \
+		<input type='text' name='startTime' value='1:30 PM' /><br /> \
+		<label for='endTime'>End Time</label> \
+		<input type='text' name='endTime' value='3:30 PM' /><br /><br /> \
+		\
+    	Week Of <input type=\"text\" name=\"weekOf\" value=\"" + weekOfStr + "\" /><br /><br /> \
+		On Days<br />\
+    	<input type='checkbox' name='Monday' />Monday<br /> \
+    	<input type='checkbox' name='Tuesday' />Tuesday<br /> \
+    	<input type='checkbox' name='Wednesday' />Wednesday<br /> \
+    	<input type='checkbox' name='Thursday' />Thursday<br /> \
+    	<input type='checkbox' name='Friday' />Friday<br /> \
+    	<input type='checkbox' name='Saturday' />Saturday<br /> \
+    	<input type='checkbox' name='Sunday' />Sunday<br /><br /> \
+		<label for='notes'>Notes</label> \
+		<input type='text' name='notes' value='Note to self...' /><br /><br /> \
+    	<button type='button' onclick='saveChanges(-1);'>Add Event</button>"; // -1 represents adding a new event
+	$("#addEvent").html(html);
 }
 
 $(document).ready(function() {
 	connect();
 	refreshCalendar(calendar);
+	populateAddEvent();
 });
 
 $(function () {

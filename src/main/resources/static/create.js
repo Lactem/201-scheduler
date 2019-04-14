@@ -78,7 +78,15 @@ function sendNewCalendar() {
 	}
 }
 
-$(document).ready(connect());
+$(document).ready(function() {
+	connect();
+	
+	// Get the current week
+	var today = moment();
+	var weekOf = today.startOf('week').isoWeekday(1);
+	var weekOfStr = weekOf.format('D/M/YYYY');
+	$("#weekOf").val(weekOfStr);
+});
 
 $(function () {
     $("form").on('submit', function (e) {

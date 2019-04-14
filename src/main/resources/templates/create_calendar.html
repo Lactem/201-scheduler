@@ -7,6 +7,7 @@
     <script src="/webjars/jquery/jquery.min.js"></script>
     <script src="/webjars/sockjs-client/sockjs.min.js"></script>
     <script src="/webjars/stomp-websocket/stomp.min.js"></script>
+    <script src="/webjars/momentjs/moment.js"></script>
     <script th:inline="javascript">
     	var ownerEmail = /*[[${webVisitor.user.email}]]*/ null;
     </script>
@@ -29,7 +30,7 @@
     		<label for="endTime">End Time</label>
     		<input type="text" name="endTime" value="3:00 PM" /><br /><br />
     		
-    		Week Of <input id="weekOf" type="text" name="weekOf" th:value="${weekOf}" /><br /><br />
+    		Week Of <input id="weekOf" type="text" name="weekOf" /><br /><br />
     		On Days<br />
     		<input type="checkbox" name="Monday" />Monday<br />
     		<input type="checkbox" name="Tuesday" />Tuesday<br />
@@ -47,7 +48,7 @@
     	</form>
     </div>
     
-    <!-- Div for a hidden form used to redirect the user after calendar creation -->
+    <!-- Div for a hidden form used to redirect the user to the "view calendar" page after calendar creation -->
     <div id="redirect"></div>
     
 </body>
