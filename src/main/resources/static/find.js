@@ -1,0 +1,73 @@
+var stompClient = null;
+
+function connect() {
+    var socket = new SockJS('/calendar-websocket');
+    stompClient = Stomp.over(socket);
+    stompClient.connect({}, function (frame) {
+        console.log('Connected: ' + frame);
+        populateControls();
+        
+        // Listen for responses to the week view we requested
+        stompClient.subscribe('/topic/conflicts', function (response) {
+        	var events = JSON.parse(response.body).conflictingEvents;
+        	console.log('received events, printing...');
+        	console.log(events);
+        	updateView(events);
+        });
+    });
+}
+
+// Sends a message to the server requesting a list of events for a given week
+function requestConflicts() {
+	var calendarIds = [];
+	$.each($('input[name="calendar"]:checked'), function() {
+		calendarIds.push($(this).val());
+	});
+
+	stompClient.send("/app/calendar/conflicts", {}, JSON.stringify(
+			{
+				'calendarIds': calendarIds
+			}));
+}
+
+function updateView(events) {
+	var html = "<table><tbody>";
+	for (var i = 0; i < events.length -1; i+=2) {
+		event = events[i];
+		event2 = events[i+1];
+		html += "<tr> \
+			<td>" + event.title + "</td> \
+			<td>" + event.start + " - </td> \
+			<td>" + event.end + "</td> \
+			<td> | Conflicts With | </td> \
+			<td>" + event2.title + "</td> \
+			<td>" + event2.start + " - </td> \
+			<td>" + event2.end + "</td> \
+		</tr>";
+	}
+	
+	html +=	"</tbody></table>";
+	$("#viewEvents").html(html);
+}
+
+function populateControls() {
+	
+	// Display the user's calendars and select a default
+	var html = "<b><label>Select Calendar</label></b>";
+	console.log(allCalendars);
+	for (i in allCalendars) {
+		calendar = allCalendars[i];
+		html += "<input type='checkbox' name='calendar' value='" + calendar.id + "' />" + calendar.name + "<br />";
+	}
+	html += "<button type='button' onclick='requestConflicts();'>Check Conflicts</button>";
+	$("#selectCalendars").html(html);
+		
+}
+
+$(document).ready(connect());
+
+$(function () {
+    $("form").on('submit', function (e) {
+        e.preventDefault();
+    });
+});

@@ -22,6 +22,7 @@ import org.springframework.web.client.RestTemplate;
 import scheduler.WebVisitor;
 import scheduler.controller.calendar.message.CreateMessage;
 import scheduler.controller.calendar.message.CreateMessageResponse;
+import scheduler.controller.calendar.message.FindMessageResponse;
 import scheduler.controller.calendar.message.UpdateMessage;
 import scheduler.controller.calendar.message.UpdateMessageResponse;
 import scheduler.controller.calendar.message.ValidateMessage;
@@ -73,7 +74,7 @@ public class CalendarController {
 			// TODO: Add search functionality
 		}
 				
-		model.addAttribute("calendars", calendars);
+		model.addAttribute("allCalendars", calendars);
 		return "find_calendars";
 	}
 	
@@ -170,5 +171,33 @@ public class CalendarController {
 		}
 		
 		return new ViewMessageResponse(events);
+	}
+	
+	@MessageMapping("/calendar/conflicts")
+	@SendTo("/topic/conflicts")
+	public FindMessageResponse findConflicts(FindMessage message) {
+		List<CalendarEvent> events = new ArrayList<>();
+		// Get the events for the week for each calendar requested
+		for (String calendarId : message.getCalendarIds()) {
+			Calendar calendar = restTemplate.getForObject("http://localhost:8080/api/calendar/id/" + calendarId, Calendar.class);
+			for (CalendarEvent event : calendar.getEvents()) {
+				//for(CalnedarEvent event2 : calendar)
+				events.add(event);
+			}
+		}
+		
+		List<CalendarEvent> conflicts = new ArrayList<>();
+		for(int i = 0; i < events.size()-1; i++) {
+			CalendarEvent firstEvent = events.get(i);
+			for(int j = i+1; j < events.size(); j++) {
+				CalendarEvent secondEvent = events.get(j);
+				if(firstEvent.getStart().isBefore(secondEvent.getEnd()) && firstEvent.getEnd().isAfter(secondEvent.getStart())) {
+					conflicts.add(firstEvent);
+					conflicts.add(secondEvent);
+				}
+			}
+		}
+		
+		return new FindMessageResponse(conflicts);
 	}
 }

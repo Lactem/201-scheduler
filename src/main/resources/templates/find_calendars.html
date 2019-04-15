@@ -1,35 +1,33 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>201-scheduler - Find Calendars</title>
+    <title>201-scheduler - Find Calendar</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <script src="/webjars/jquery/jquery.min.js"></script>
+    <script src="/webjars/sockjs-client/sockjs.min.js"></script>
+    <script src="/webjars/stomp-websocket/stomp.min.js"></script>
+    <script src="/webjars/momentjs/moment.js"></script>
+    <script th:inline="javascript">
+    	var allCalendars = /*[[${allCalendars}]]*/ null;
+    </script>
+    <script th:src="@{/find.js}"></script>
 </head>
 <body>
-    <a th:href="@{/}">Home</a><br />
+<noscript><h2 style="color: #ff0000">Seems your browser doesn't support Javascript! Websocket relies on Javascript being
+    enabled. Please enable
+    Javascript and reload this page!</h2>
+</noscript>
+	<a th:href="@{/}">Home</a><br />
 	<label th:text="'User Id: ' + ${webVisitor.id}"></label><br /><br />
 	
-	<div id="findCalendars">
-		<p th:if="${#lists.isEmpty(calendars)}">No calendars were found.</p>
-		
-		<div id="showFoundCalendars" th:unless="${#lists.isEmpty(calendars)}">
-			<table>
-				<th:block th:each="calendar : ${calendars}">
-				<tr>
-					<td th:text="${calendar.name}"></td>
-					<td th:with="calendarId=${calendar.id}">
-						<form action="#" th:action="@{/calendar/view}" method="POST">
-							<input type="hidden" name="calendarId" th:value="${calendar.id}" />
-							<button type="submit" th:text="'View ' + ${calendar.name}">View Calendar</button>
-						</form>
-						<form action="#" th:action="@{/calendar/edit}" method="POST">
-							<input type="hidden" name="calendarId" th:value="${calendar.id}" />
-							<button type="submit" th:text="'Edit ' + ${calendar.name}">Edit Calendar</button>
-						</form>
-					</td>
-				</tr>
-				</th:block>
-			</table>
-		</div>
+	<!-- DISPLAY THE CALENDAR IN A TABLE VIA JAVASCRIPT -->
+	<div id="viewEvents"></div>
+	
+	<!-- CALENDAR VIEWING CONTROLS -->
+	<div id="controls">
+				
+		<!-- JavaScript updates this with a list of calendars to choose from -->
+		<div id="selectCalendars"></div>
 	</div>
 </body>
 </html>
