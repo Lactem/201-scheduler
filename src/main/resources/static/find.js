@@ -32,7 +32,7 @@ function requestConflicts() {
 
 function updateView(events) {
 	var html = "<table><tbody>";
-	for (var i = 0; i < events.length -1; i+=2) {
+	for (var i = 0; i < events.length -1; i+=2) { //every two events are a conflict
 		event = events[i];
 		event2 = events[i+1];
 		html += "<tr> \

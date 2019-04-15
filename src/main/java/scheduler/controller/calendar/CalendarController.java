@@ -194,6 +194,7 @@ public class CalendarController {
 				if(firstEvent.getStart().isBefore(secondEvent.getEnd()) && firstEvent.getEnd().isAfter(secondEvent.getStart())) {
 					conflicts.add(firstEvent);
 					conflicts.add(secondEvent);
+					//adds both of them so that when displaying we know that every two is a conflict and those can then be displayed together
 				}
 			}
 		}
