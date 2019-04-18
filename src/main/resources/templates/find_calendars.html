@@ -9,6 +9,7 @@
     <script src="/webjars/momentjs/moment.js"></script>
     <script th:inline="javascript">
     	var allCalendars = /*[[${allCalendars}]]*/ null;
+    	var webVisitor = /*[[${webVisitor}]]*/ null;
     </script>
     <script th:src="@{/find.js}"></script>
 </head>
@@ -28,6 +29,7 @@
 				
 		<!-- JavaScript updates this with a list of calendars to choose from -->
 		<div id="selectCalendars"></div>
+		<div id="view"></div>
 	</div>
 </body>
 </html>

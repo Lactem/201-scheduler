@@ -58,6 +58,16 @@ function populateControls() {
 	for (i in allCalendars) {
 		calendar = allCalendars[i];
 		html += "<input type='checkbox' name='calendar' value='" + calendar.id + "' />" + calendar.name + "<br />";
+		
+		// Add view button
+		html += "<form action='/calendar/view' method='POST'>";
+		html += "<input type='hidden' name='calendarId' value=" + calendar.id + " />";
+		html += "<input type='hidden' name='webVisitor' value=" + webVisitor + " />";
+		html += "<button type='submit'>View Calendar</button></form>";
+		html += "<form action='/calendar/edit' method='POST'>";
+		html += "<input type='hidden' name='calendarId' value=" + calendar.id + " />";
+		html += "<input type='hidden' name='webVisitor' value=" + webVisitor + " />";
+		html += "<button type='submit'>Edit Calendar</button></form>";
 	}
 	html += "<button type='button' onclick='requestConflicts();'>Check Conflicts</button>";
 	$("#selectCalendars").html(html);

@@ -82,6 +82,7 @@ public class CalendarController {
 	public String viewCalendar(@ModelAttribute("webVisitor") WebVisitor webVisitor,
 			@RequestParam("calendarId") String calendarId,
 			Model model) {
+		System.out.println("view called for " + calendarId);
 		model.addAttribute("webVisitor", webVisitor);
 		model.addAttribute("viewedCalendar", restTemplate.getForObject("http://localhost:8080/api/calendar/id/" + calendarId, Calendar.class));
 		ResponseEntity<List<Calendar>> userCalendars = restTemplate.exchange(
