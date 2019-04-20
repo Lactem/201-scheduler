@@ -27,7 +27,7 @@
 	
     <!-- REGISTER DEMO -->
     <br /><br /><br />
-    <div id="register" class = "loginRegister">
+    <div th:if="${webVisitor.loggedIn == false}" id="register" class = "loginRegister">
 	    <h4>Sign Up! It's Free!</h4><br/>
 	    <form action="/user/register" method="POST">
 	    	Email<br/> <input type="text" name="email" width="48" th:if="${registerEmail}" th:value="${registerEmail}"/>
@@ -46,7 +46,7 @@
     
     <!-- LOGIN DEMO -->
     <br /><br />
-    <div id="login" class="loginRegister">
+    <div th:if="${webVisitor.loggedIn == false}" id="login" class="loginRegister">
 	    <h4>Log In</h4><br/>
 	    <form action="/user/login" method="POST">
 	    	Email<br/> <input type="text" name="email" th:if="${loginEmail}" th:value="${loginEmail}"/>
@@ -55,6 +55,10 @@
 	    	<input type="submit" value="Login" />
 	    </form>
 	    <p style="font-size:12px; text-align: center;">Don't have an account? Register <a href="#" onclick="swapRegLogin();">here!</a></p>
+    </div>
+    
+    <div th:if="${webVisitor.loggedIn}" id="signout" class="signout">
+    	Sign Out
     </div>
     
     <br/>
@@ -75,5 +79,345 @@
 	    </form>
 	</div>
     <!-- END FIND CALENDAR DEMO -->
+    
+    <!-- EXAMPLE CALENDAR -->
+    <div id="Calendar" class="Calendar">
+    <br><br>
+    <div id="weekOf" class="weekOf">Week of April 22, 2019</div>
+		<table>
+		  <thead>
+		    <tr>
+		      <th></th>
+		      <th>
+		        <span class="day">1</span>
+		        <span class="short">Mon</span>
+		      </th>
+		      <th>
+		        <span class="day">2</span>
+		        <span class="short">Tues</span>
+		      </th>
+		      <th>
+		        <span class="day">3</span>
+		        <span class="short">Wed</span>
+		      </th>
+		      <th>
+		        <span class="day">4</span>
+		        <span class="short">Thurs</span>
+		      </th>
+		      <th>
+		        <span class="day active">5</span>
+		        <span class="short">Fri</span>
+		      </th>
+		      <th>
+		        <span class="day">6</span>
+		        <span class="short">Sat</span>
+		      </th>
+		      <th>
+		        <span class="day">7</span>
+		        <span class="short">Sun</span>
+		      </th>
+		    </tr>
+		  </thead>
+		  <tbody>
+		    <tr>
+		      <td id="8am" class="hour" rowspan="4"><span>8:00a</span></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		    </tr>
+		    <tr>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		    </tr>
+		    <tr>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		    </tr>
+		    <tr>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		    </tr>
+		    <tr>
+		      <td id="10am" class="hour" rowspan="4"><span>10:00a</span></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		    </tr>
+		    <tr>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		    </tr>
+		    <tr>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		    </tr>
+		    <tr>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		    </tr>
+		    
+		    <tr>
+		      <td id="12pm" class="hour" rowspan="4"><span>12:00p</span></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		    </tr>
+		    <tr>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		    </tr>
+		    <tr>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		    </tr>
+		    <tr>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		    </tr>
+		    <tr>
+		      <td id="2pm" class="hour" rowspan="4"><span>2:00p</span></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		    </tr>
+		    <tr>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		    </tr>
+		    <tr>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		    </tr>
+		    <tr>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		    </tr>
+		    <tr>
+		      <td id="4pm" class="hour" rowspan="4"><span>4:00p</span></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		    </tr>
+		    <tr>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		    </tr>
+		    <tr>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		    </tr>
+		    <tr>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		    </tr>
+		    <tr>
+		      <td id="6pm" class="hour" rowspan="4"><span>6:00p</span></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		    </tr>
+		    <tr>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		    </tr>
+		    <tr>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		    </tr>
+		    <tr>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		    </tr>
+		    <tr>
+		      <td id="8pm" class="hour" rowspan="4"><span>8:00p</span></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		    </tr>
+		    <tr>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		    </tr>
+		    <tr>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		    </tr>
+		    <tr>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		    </tr>
+		    <tr>
+		      <td id="10pm" class="hour" rowspan="4"><span>10:00p</span></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		    </tr>
+		    <tr>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		    </tr>
+		    <tr>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		    </tr>
+		    <tr>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		      <td></td>
+		    </tr>
+		  </tbody>
+		</table>
+	</div>
 </body>
 </html>
