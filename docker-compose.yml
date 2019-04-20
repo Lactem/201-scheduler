@@ -1,0 +1,26 @@
+version: '3.3'
+
+services:
+  mongo:
+    image: mongo
+    volumes:
+      - ~/scheduler-data/mongo/data:/data/db
+    container_name: mongo_container
+    networks:
+      - scheduler-network
+    ports:
+      - "27017:27017"
+  scheduler:
+    build:
+      context: .
+    image: tilie/scheduler:latest
+    networks:
+      - scheduler-network
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mongo
+
+networks:
+  scheduler-network:
+    driver: bridge

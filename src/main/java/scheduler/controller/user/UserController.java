@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import scheduler.SchedulerApplication;
 import scheduler.WebVisitor;
 import scheduler.data.Calendar;
 import scheduler.data.User;
@@ -41,7 +42,7 @@ public class UserController {
 		
 		// Verify that the email address doesn't already exist
 		try {
-			restTemplate.getForObject("http://localhost:8080/api/user/" + email, User.class);
+			restTemplate.getForObject(SchedulerApplication.HOST + "/api/user/" + email, User.class);
 			model.addAttribute("registerErr", "That email address is already associated with an account.");
 			return "index";
 		} catch (HttpClientErrorException.NotFound ignored) {}
@@ -60,7 +61,7 @@ public class UserController {
 		
 		// Create a new user
 		User user = new User(email, password);
-		user = restTemplate.postForObject("http://localhost:8080/api/user", user, User.class);
+		user = restTemplate.postForObject(SchedulerApplication.HOST + "/api/user", user, User.class);
 		
 		// Log the user in
 		webVisitor.setUser(user);
@@ -70,7 +71,7 @@ public class UserController {
 			Calendar calendar = webVisitor.getGuestCalendar();
 			calendar.setName("Calendar1");
 			calendar.setOwnerEmail(webVisitor.getUser().getEmail());
-			restTemplate.postForObject("http://localhost:8080/api/calendar/new", calendar, Calendar.class);
+			restTemplate.postForObject(SchedulerApplication.HOST + "/api/calendar/new", calendar, Calendar.class);
 			webVisitor.setGuestCalendar(null);
 		}
 		
@@ -96,7 +97,7 @@ public class UserController {
 		// Verify that the email address corresponds to an actual user
 		User user;
 		try {
-			user = restTemplate.getForObject("http://localhost:8080/api/user/" + email, User.class);
+			user = restTemplate.getForObject(SchedulerApplication.HOST + "/api/user/" + email, User.class);
 		} catch (HttpClientErrorException.NotFound userNotFoundEx) {
 			model.addAttribute("loginErr", "No account associated with that email address exists.");
 			return "redirect:/index";

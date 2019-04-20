@@ -11,6 +11,8 @@ import org.springframework.web.client.RestTemplate;
  */
 @SpringBootApplication
 public class SchedulerApplication {
+	// The start of the fully-qualified URI to make REST calls to.
+	public static String HOST = "http://localhost:8080";
 
 	public static void main(String[] args) {
 		SpringApplication.run(SchedulerApplication.class, args);
