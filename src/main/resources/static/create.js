@@ -19,7 +19,7 @@ function connect() {
 
         	// Redirect the user to the "view calendar" page if the calendar was created successfully
         	if (responseMsg == "OK") {
-        		$("#redirect").html('<form action="http://localhost:8080/calendar/view/' +
+        		$("#redirect").html('<form action="' + HOST + '/calendar/view/' +
         				'" method="POST" name="redirect" style="display:none;">' +
         				'<input type="text" name="calendarId" value="' + calendarId + '" /></form>');
         		document.forms['redirect'].submit();

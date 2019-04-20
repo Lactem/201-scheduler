@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.client.RestTemplate;
 
+import scheduler.SchedulerApplication;
 import scheduler.WebVisitor;
 import scheduler.controller.calendar.message.CreateMessage;
 import scheduler.controller.calendar.message.CreateMessageResponse;
@@ -50,6 +51,7 @@ public class CalendarController {
 	@RequestMapping(value="/calendar/new", method=RequestMethod.GET)
 	public String newCalendarGet(@ModelAttribute("webVisitor") WebVisitor webVisitor, Model model) {
 		model.addAttribute("webVisitor", webVisitor);
+		model.addAttribute("HOST", SchedulerApplication.HOST);
 		
 		return "create_calendar";
 	}
@@ -62,16 +64,30 @@ public class CalendarController {
 		
 		List<Calendar> calendars = new ArrayList<>();
 		// If no calendar name is specified, return all of the calendars that this user has created
-		// TODO: Return calendars that have been shared with this user, too
 		if (calendarName.trim().isEmpty()) {
+			// Calendars owned by the user
 			ResponseEntity<List<Calendar>> userCalendars = restTemplate.exchange(
-					"http://localhost:8080/api/calendar/email/" + webVisitor.getUser().getEmail(),
+					SchedulerApplication.HOST + "/api/calendar/ownedEmail/" + webVisitor.getUser().getEmail(),
 					HttpMethod.GET,
 					null,
 					new ParameterizedTypeReference<List<Calendar>>(){});
 			if (userCalendars.getBody() != null) calendars.addAll(userCalendars.getBody());
+			
+			// Calendars shared with the user
+			ResponseEntity<List<Calendar>> sharedCalendars = restTemplate.exchange(
+					SchedulerApplication.HOST + "/api/calendar/sharedEmail/" + webVisitor.getUser().getEmail(),
+					HttpMethod.GET,
+					null,
+					new ParameterizedTypeReference<List<Calendar>>(){});
+			if (sharedCalendars.getBody() != null) calendars.addAll(sharedCalendars.getBody());
 		} else {
-			// TODO: Add search functionality
+			// Calendars that contain the given string in their name
+			ResponseEntity<List<Calendar>> sharedCalendars = restTemplate.exchange(
+					SchedulerApplication.HOST + "/api/calendar/findByName/" + webVisitor.getUser().getEmail() + "/" + calendarName,
+					HttpMethod.GET,
+					null,
+					new ParameterizedTypeReference<List<Calendar>>(){});
+			if (sharedCalendars.getBody() != null) calendars.addAll(sharedCalendars.getBody());
 		}
 				
 		model.addAttribute("allCalendars", calendars);
@@ -82,14 +98,27 @@ public class CalendarController {
 	public String viewCalendar(@ModelAttribute("webVisitor") WebVisitor webVisitor,
 			@RequestParam("calendarId") String calendarId,
 			Model model) {
+		System.out.println("view called for " + calendarId);
 		model.addAttribute("webVisitor", webVisitor);
-		model.addAttribute("viewedCalendar", restTemplate.getForObject("http://localhost:8080/api/calendar/id/" + calendarId, Calendar.class));
+		model.addAttribute("viewedCalendar", restTemplate.getForObject(SchedulerApplication.HOST + "/api/calendar/id/" + calendarId, Calendar.class));
+		
+		List<Calendar> allCalendars = new ArrayList<>();
+		// Calendars owned by the user
 		ResponseEntity<List<Calendar>> userCalendars = restTemplate.exchange(
-				"http://localhost:8080/api/calendar/email/" + webVisitor.getUser().getEmail(),
+				SchedulerApplication.HOST + "/api/calendar/ownedEmail/" + webVisitor.getUser().getEmail(),
 				HttpMethod.GET,
 				null,
 				new ParameterizedTypeReference<List<Calendar>>(){});
-		model.addAttribute("allCalendars", userCalendars.getBody());
+		if (userCalendars.getBody() != null) allCalendars.addAll(userCalendars.getBody());
+		
+		// Calendars shared with the user
+		ResponseEntity<List<Calendar>> sharedCalendars = restTemplate.exchange(
+				SchedulerApplication.HOST + "/api/calendar/sharedEmail/" + webVisitor.getUser().getEmail(),
+				HttpMethod.GET,
+				null,
+				new ParameterizedTypeReference<List<Calendar>>(){});
+		if (sharedCalendars.getBody() != null) allCalendars.addAll(sharedCalendars.getBody());
+		model.addAttribute("allCalendars", allCalendars);
 		
 		return "view_calendar";
 	}
@@ -99,7 +128,8 @@ public class CalendarController {
 			@RequestParam("calendarId") String calendarId,
 			Model model) {
 		model.addAttribute("webVisitor", webVisitor);
-		model.addAttribute("calendar", restTemplate.getForObject("http://localhost:8080/api/calendar/id/" + calendarId, Calendar.class));
+		model.addAttribute("HOST", SchedulerApplication.HOST);
+		model.addAttribute("calendar", restTemplate.getForObject(SchedulerApplication.HOST + "/api/calendar/id/" + calendarId, Calendar.class));
 		
 		return "edit_calendar";
 	}
@@ -127,7 +157,7 @@ public class CalendarController {
 		calendar.setEditorEmails(new ArrayList<>());
 		
 		// Save the new calendar
-		calendar = restTemplate.postForObject("http://localhost:8080/api/calendar/new", calendar, Calendar.class);
+		calendar = restTemplate.postForObject(SchedulerApplication.HOST + "/api/calendar/new", calendar, Calendar.class);
 		
 		return new CreateMessageResponse(calendar.getId(), "OK");
 	}
@@ -138,15 +168,14 @@ public class CalendarController {
 	@MessageMapping("/calendar/submitChanges")
 	@SendTo("/topic/calendarChanges")
 	public UpdateMessageResponse submitChanges(UpdateMessage changes) {
-		Calendar calendar = restTemplate.getForObject("http://localhost:8080/api/calendar/id/" + changes.getCalendarId(), Calendar.class);
+		Calendar calendar = restTemplate.getForObject(SchedulerApplication.HOST + "/api/calendar/id/" + changes.getCalendarId(), Calendar.class);
 		
 		// Remove the edited event (an "edited index" of -1 represents adding a new event)
 		if (changes.getEditedEventIndex() != -1) calendar.getEvents().remove(changes.getEditedEventIndex());
 		
 		if (!changes.isRemove()) calendar.getEvents().addAll(ValidateMessage.toEvents(changes.getEditedEvent()));
 		
-		// TODO: Handle conflicts - decide if the changes are accepted or rejected
-		restTemplate.put("http://localhost:8080/api/calendar/updateEvents/" + calendar.getId(), calendar.getEvents());
+		restTemplate.put(SchedulerApplication.HOST + "/api/calendar/updateEvents/" + calendar.getId(), calendar.getEvents());
 		return new UpdateMessageResponse(calendar);
 	}
 	
@@ -162,7 +191,7 @@ public class CalendarController {
 		
 		// Get the events for the week for each calendar requested
 		for (String calendarId : message.getCalendarIds()) {
-			Calendar calendar = restTemplate.getForObject("http://localhost:8080/api/calendar/id/" + calendarId, Calendar.class);
+			Calendar calendar = restTemplate.getForObject(SchedulerApplication.HOST + "/api/calendar/id/" + calendarId, Calendar.class);
 			for (CalendarEvent event : calendar.getEvents()) {
 				if (event.getStart().isAfter(weekStart) && event.getStart().isBefore(weekEnd)) {
 					events.add(event);
@@ -179,9 +208,8 @@ public class CalendarController {
 		List<CalendarEvent> events = new ArrayList<>();
 		// Get the events for the week for each calendar requested
 		for (String calendarId : message.getCalendarIds()) {
-			Calendar calendar = restTemplate.getForObject("http://localhost:8080/api/calendar/id/" + calendarId, Calendar.class);
+			Calendar calendar = restTemplate.getForObject(SchedulerApplication.HOST + "/api/calendar/id/" + calendarId, Calendar.class);
 			for (CalendarEvent event : calendar.getEvents()) {
-				//for(CalnedarEvent event2 : calendar)
 				events.add(event);
 			}
 		}
