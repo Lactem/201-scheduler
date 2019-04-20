@@ -62,16 +62,30 @@ public class CalendarController {
 		
 		List<Calendar> calendars = new ArrayList<>();
 		// If no calendar name is specified, return all of the calendars that this user has created
-		// TODO: Return calendars that have been shared with this user, too
 		if (calendarName.trim().isEmpty()) {
+			// Calendars owned by the user
 			ResponseEntity<List<Calendar>> userCalendars = restTemplate.exchange(
-					"http://localhost:8080/api/calendar/email/" + webVisitor.getUser().getEmail(),
+					"http://localhost:8080/api/calendar/ownedEmail/" + webVisitor.getUser().getEmail(),
 					HttpMethod.GET,
 					null,
 					new ParameterizedTypeReference<List<Calendar>>(){});
 			if (userCalendars.getBody() != null) calendars.addAll(userCalendars.getBody());
+			
+			// Calendars shared with the user
+			ResponseEntity<List<Calendar>> sharedCalendars = restTemplate.exchange(
+					"http://localhost:8080/api/calendar/sharedEmail/" + webVisitor.getUser().getEmail(),
+					HttpMethod.GET,
+					null,
+					new ParameterizedTypeReference<List<Calendar>>(){});
+			if (sharedCalendars.getBody() != null) calendars.addAll(sharedCalendars.getBody());
 		} else {
-			// TODO: Add search functionality
+			// Calendars that contain the given string in their name
+			ResponseEntity<List<Calendar>> sharedCalendars = restTemplate.exchange(
+					"http://localhost:8080/api/calendar/findByName/" + webVisitor.getUser().getEmail() + "/" + calendarName,
+					HttpMethod.GET,
+					null,
+					new ParameterizedTypeReference<List<Calendar>>(){});
+			if (sharedCalendars.getBody() != null) calendars.addAll(sharedCalendars.getBody());
 		}
 				
 		model.addAttribute("allCalendars", calendars);

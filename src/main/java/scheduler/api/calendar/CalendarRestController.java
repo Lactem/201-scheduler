@@ -30,12 +30,38 @@ public class CalendarRestController {
 	}
     
 	/**
-	 * Finds a list of calendars by their email address of the user who owns them.
+	 * Finds a list of calendars by the email address of the user who owns them.
 	 */
-	@GetMapping("/api/calendar/email/{ownerEmail}")
-	List<Calendar> findCalendars(@PathVariable String ownerEmail) {
+	@GetMapping("/api/calendar/ownedEmail/{ownerEmail}")
+	List<Calendar> findOwnedCalendars(@PathVariable String ownerEmail) {
 		return calendarRepo.findAll().stream()
-				.filter(calendar -> calendar != null && calendar.getOwnerEmail() != null && calendar.getOwnerEmail().equals(ownerEmail))
+				.filter(calendar -> calendar != null && calendar.getOwnerEmail() != null &&
+						calendar.getOwnerEmail().equals(ownerEmail))
+				.collect(Collectors.toList());
+	}
+	
+	/**
+	 * Finds a list of calendars by the email address of a user who they're shared with.
+	 */
+	@GetMapping("/api/calendar/sharedEmail/{sharedEmail}")
+	List<Calendar> findSharedCalendars(@PathVariable String sharedEmail) {
+		return calendarRepo.findAll().stream()
+				.filter(calendar -> calendar != null && calendar.getEditorEmails() != null &&
+						calendar.getEditorEmails().contains(sharedEmail))
+				.collect(Collectors.toList());
+	}
+	
+	/**
+	 * Finds a list of calendars whose name contains a given string and are owned by or shared with a user.
+	 */
+	@GetMapping("/api/calendar/findByName/{email}/{name}")
+	List<Calendar> findCalendarsByName(@PathVariable String email, @PathVariable String name) {
+		List<Calendar> allCalendars = findOwnedCalendars(email);
+		allCalendars.addAll(findSharedCalendars(email));
+		
+		return allCalendars.stream()
+				.filter(calendar -> calendar.getName() != null &&
+						calendar.getName().toLowerCase().contains(name.toLowerCase()))
 				.collect(Collectors.toList());
 	}
 	
