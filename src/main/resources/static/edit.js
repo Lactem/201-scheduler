@@ -11,7 +11,7 @@ function connect() {
         	var updatedCalendar = JSON.parse(calendarChange.body).updatedCalendar;
             // Make an AJAX call to get the updated calendar. Refresh the DOM using jQuery once the call is complete
             $.ajax({
-                url: HOST + "/api/calendar/id/" + updatedCalendar.id
+                url: ROUTE + "/api/calendar/id/" + updatedCalendar.id
             }).then(function(response) {
             	console.log('printing response...');
             	console.log(response);
