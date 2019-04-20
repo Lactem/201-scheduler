@@ -1,15 +1,16 @@
 version: '3.3'
 
 services:
-  mongo:
+  scheduler-mongo:
     image: mongo
     volumes:
       - ~/scheduler-data/mongo/data:/data/db
-    container_name: mongo_container
+    container_name: scheduler_mongo_container
     networks:
       - scheduler-network
+    command: mongod --port 27018
     ports:
-      - "27017:27017"
+      - "27018:27018"
   scheduler:
     build:
       context: .
@@ -17,9 +18,9 @@ services:
     networks:
       - scheduler-network
     ports:
-      - "8080:8080"
+      - "8000:8000" # Make sure this port matches server.port in application_docker.properties, as well as the port in the global HOST variable in SchedulerApplication.java (src/main/java/scheduler)
     depends_on:
-      - mongo
+      - scheduler-mongo
 
 networks:
   scheduler-network:
