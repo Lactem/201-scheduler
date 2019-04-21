@@ -25,6 +25,9 @@ function requestWeek() {
 		calendarIds.push($(this).val());
 	});
 	var weekOf = $("#controls").children('input[name="viewingWeek"]').val();
+	//console.log("WEEK OF " + weekOf);
+	weekOf = moment(weekOf).format("D/M/YYYY");
+	//console.log("NEW WEEK OF " + weekOf);
 
 	stompClient.send("/app/calendar/viewWeek", {}, JSON.stringify(
 			{
@@ -36,8 +39,8 @@ function requestWeek() {
 function updateView(events) {
 	
 	var weekOf = moment(events[0].weekOf);
-	var daysOfWeek = ["Mon", "Tues", "Wed", "Thurs", "Fri", "Sat", "Sun"];
-	var datesOfWeek = [weekOf.day(1).format("D"), weekOf.day(2).format("D"), weekOf.day(3).format("D"), weekOf.day(4).format("D"), weekOf.day(5).format("D"), weekOf.day(6).format("D"), weekOf.day(0).format("D")];
+	var daysOfWeek = ["Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"];
+	var datesOfWeek = [weekOf.day(0).format("D"), weekOf.day(1).format("D"), weekOf.day(2).format("D"), weekOf.day(3).format("D"), weekOf.day(4).format("D"), weekOf.day(5).format("D"), weekOf.day(6).format("D")];
 	var html = "<br><br><table><thead><tr><th></th>"; //<tbody>
 	
 	for(var i = 0; i < 7; i++) {
@@ -72,12 +75,13 @@ function updateView(events) {
 	html += "</tbody></table>";
 	for (i in events) {
 		event = events[i];
-		html += "<tr> \
+		console.log(moment(event.start).format("MMM D YY"));
+		/*html += "<tr> \
 			<td>" + event.title + "</td> \
 			<td>Starts: " + event.start + "</td> \
 			<td>Ends: " + event.end + "</td> \
 			<td>Notes: " + event.notes + "</td> \
-		</tr>";
+		</tr>";*/
 	}
 	
 	html +=	"</tbody></table>";
@@ -88,7 +92,7 @@ function populateControls() {
 	// Get the current week and display it
 	var today = moment();
 	var weekOf = today.startOf('week').isoWeekday(1);
-	var weekOfStr = weekOf.format('D/M/YYYY');
+	var weekOfStr = weekOf.format('M/D/YYYY');
 	$('input[name="viewingWeek"]').val(weekOfStr);
 	
 	// Display the user's calendars and select a default
