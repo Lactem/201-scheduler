@@ -105,12 +105,12 @@ function populateControls() {
 	$('input[name="viewingWeek"]').val(weekOfStr);
 	
 	// Display the user's calendars and select a default
-	var html = "<b><label>Select Calendar</label></b>";
-	html += "<input type='checkbox' name='calendar' value='" + viewedCalendar.id + "' checked />" + viewedCalendar.name + "<br />";
+	var html = "<b><label>Select Calendar</label></b><br>";
+	html += "<br><div class='selectCal'><input type='checkbox' class='selectCal' name='calendar' value='" + viewedCalendar.id + "' checked />" + viewedCalendar.name + "</div><br />";
 	for (i in allCalendars) {
 		calendar = allCalendars[i];
 		if (calendar.id == viewedCalendar.id) continue;
-		html += "<input type='checkbox' name='calendar' value='" + calendar.id + "' />" + calendar.name + "<br />";
+		html += "<div class='selectCal'><input type='checkbox' class='selectCal' name='calendar' value='" + calendar.id + "' />" + calendar.name + "</div><br />";
 	}
 	html += "<button type='button' onclick='requestWeek();'>View</button>";
 	$("#selectCalendars").html(html);

@@ -1,3 +1,7 @@
+@blue: #626E7E;
+@light: lighten(@blue, 40%);
+@light2: darken(@light, 3%);
+
 body {
 	font-family: "Myriad Pro", Myriad, "Liberation Sans", "Nimbus Sans L", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
@@ -28,9 +32,17 @@ input[type="text"] {
 	float: center;
 }
 
+.selectCal {
+	border: 1px solid #55CC87; /*green*/
+	background: #55CC87;
+	padding: 10px;
+	margin-left: 30px;
+	width: 30%;
+}
+
 #viewEvents table {
 	font-family:sans-serif;
-	width: 80%;
+	width: 90%;
 	border-spacing: 0;
 	border-collapse: separate;
 	table-layout: fixed;
