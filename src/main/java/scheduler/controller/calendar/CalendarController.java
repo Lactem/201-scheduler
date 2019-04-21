@@ -25,6 +25,8 @@ import scheduler.WebVisitor;
 import scheduler.controller.calendar.message.CreateMessage;
 import scheduler.controller.calendar.message.CreateMessageResponse;
 import scheduler.controller.calendar.message.FindMessageResponse;
+import scheduler.controller.calendar.message.ShareMessage;
+import scheduler.controller.calendar.message.ShareMessageResponse;
 import scheduler.controller.calendar.message.UpdateMessage;
 import scheduler.controller.calendar.message.UpdateMessageResponse;
 import scheduler.controller.calendar.message.ValidateMessage;
@@ -104,7 +106,6 @@ public class CalendarController {
 	public String viewCalendar(@ModelAttribute("webVisitor") WebVisitor webVisitor,
 			@RequestParam("calendarId") String calendarId,
 			Model model) {
-		System.out.println("view called for " + calendarId);
 		model.addAttribute("webVisitor", webVisitor);
 		model.addAttribute("viewedCalendar", restTemplate.getForObject(routingService.getRoute() + "/api/calendar/id/" + calendarId, Calendar.class));
 		
@@ -235,5 +236,17 @@ public class CalendarController {
 		}
 		
 		return new FindMessageResponse(conflicts);
+	}
+	
+	@MessageMapping("/calendar/share")
+	@SendTo("/topic/share")
+	public ShareMessageResponse shareCalendars(ShareMessage message) {
+		for (String calendarId : message.getCalendarIds()) {
+			for (String email : message.getEmails().split(",")) {
+				restTemplate.put(routingService.getRoute() + "/api/calendar/share/" + calendarId, email);
+			}
+		}
+		
+		return new ShareMessageResponse("The calendars were shared with the email addresses were shared if they were valid.");
 	}
 }

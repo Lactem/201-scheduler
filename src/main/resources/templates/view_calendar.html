@@ -32,6 +32,16 @@
 		
 		<!-- JavaScript updates this with a list of calendars to choose from -->
 		<div id="selectCalendars"></div>
+		
+		<!-- This div is hidden by default and is shown when the user clicks the "Share" button -->
+		<div id="sharePopup">
+			<div class="reveal-modal">
+				<form>
+					<input type="text" name="sharingEmails" placeholder="Comma-separated list of emails to share with..." />
+					<button type="button" onclick="finishSharingCalendars();">Submit</button>
+				</form>
+			</div>
+		</div>
 	</div>
 </body>
 </html>

@@ -85,11 +85,11 @@ public class ValidateMessage {
 	}
 	
 	/**
-	 * Takes a string of the format DD/MM/YYYY and converts it to a LocalDate object.
+	 * Takes a string of the format MM/DD/YYYY and converts it to a LocalDate object.
 	 */
 	public static LocalDate strToDate(String str) {
-		int day = Integer.valueOf(str.split("/")[0]);
-		int month = Integer.valueOf(str.split("/")[1]);
+		int month = Integer.valueOf(str.split("/")[0]);
+		int day = Integer.valueOf(str.split("/")[1]);
 		int year = Integer.valueOf(str.split("/")[2]);
 		return LocalDate.of(year, month, day);
 	}

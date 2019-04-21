@@ -7,15 +7,12 @@ function connect() {
     var socket = new SockJS('/calendar-websocket');
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
-        console.log('Connected: ' + frame);
         
         // Listen for responses to creating a new calendar
         stompClient.subscribe('/topic/calendarCreateResponse', function (response) {
         	var responseBody = JSON.parse(response.body);
         	var responseMsg = responseBody.response;
         	var calendarId = responseBody.calendarId;
-        	console.log('response msg from /topic/calendarCreateResponse: ' + responseMsg);
-        	console.log('received calendar id: ' + calendarId);
 
         	// Redirect the user to the "view calendar" page if the calendar was created successfully
         	if (responseMsg == "OK") {
@@ -29,8 +26,6 @@ function connect() {
         // Listen for responses to validating a calendar event
         stompClient.subscribe('/topic/calendarValidateResponse', function (response) {
         	var responseEvents = JSON.parse(response.body).events;
-        	console.log('printing response msg from /topic/calendarValidateResponse...');
-        	console.log(responseEvents);
         	validatedEvents = validatedEvents.concat(responseEvents);
         	numValidatedEvents++;
         	
@@ -64,8 +59,6 @@ function validateEvent(div) {
 			'sunday': div.children('input[name="Sunday"]').is(":checked"),
 			'notes': div.children('input[name="notes"]').val()
 		};
-	console.log('printing eventData...');
-	console.log(eventData);
 	
 	stompClient.send("/app/calendar/validate", {}, JSON.stringify(eventData));
 }
@@ -73,7 +66,6 @@ function validateEvent(div) {
 function sendNewCalendar() {
 	// Validate all events
 	for (i = 0; i < numEvents; i++) {
-		console.log('looping event ' + (i+1));
 		validateEvent($("#event" + (i+1)));
 	}
 }

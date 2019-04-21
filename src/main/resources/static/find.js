@@ -4,14 +4,11 @@ function connect() {
     var socket = new SockJS('/calendar-websocket');
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
-        console.log('Connected: ' + frame);
         populateControls();
         
         // Listen for responses to the week view we requested
         stompClient.subscribe('/topic/conflicts', function (response) {
         	var events = JSON.parse(response.body).conflictingEvents;
-        	console.log('received events, printing...');
-        	console.log(events);
         	updateView(events);
         });
     });
@@ -54,7 +51,6 @@ function populateControls() {
 	
 	// Display the user's calendars and select a default
 	var html = "<b><label>Select Calendar</label><br></b>";
-	console.log(allCalendars);
 	for (i in allCalendars) {
 		calendar = allCalendars[i];
 		html += "<br><div class='selectCal'><input type='checkbox' name='calendar' value='" + calendar.id + "' />" + calendar.name + "<br />";

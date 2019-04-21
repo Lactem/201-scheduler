@@ -4,14 +4,11 @@ function connect() {
     var socket = new SockJS('/calendar-websocket');
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
-        console.log('Connected: ' + frame);
         populateControls();
         
         // Listen for responses to the week view we requested
         stompClient.subscribe('/topic/viewWeek', function (response) {
         	var events = JSON.parse(response.body).events;
-        	console.log('received events, printing...');
-        	console.log(events);
         	updateView(events);
         });
     });
@@ -25,9 +22,7 @@ function requestWeek() {
 		calendarIds.push($(this).val());
 	});
 	var weekOf = $("#controls").children('input[name="viewingWeek"]').val();
-	//console.log("WEEK OF " + weekOf);
-	weekOf = moment(weekOf).format("D/M/YYYY");
-	//console.log("NEW WEEK OF " + weekOf);
+	weekOf = moment(weekOf).format("M/D/YYYY");
 
 	stompClient.send("/app/calendar/viewWeek", {}, JSON.stringify(
 			{
@@ -63,7 +58,6 @@ function updateView(events) {
 	for (i in events) {
 		event = events[i];
 		var eventColor = eventColors[i%10];
-		//console.log(moment(event.start).format("MMM D YY"));
 		var startDate = moment(event.start).day();
 		var startDayIDTag = "#date" + startDate;
 		var startTime = moment(event.start).format("HH");
@@ -78,11 +72,9 @@ function updateView(events) {
 		var endTimeStr = endTimeInt.toString();
 		if(endTimeInt < 10) endTimeStr = "0" + endTimeInt.toString();
 		
-		//console.log(event.title);
-		
 		var dayOfHourIDTag = "#" + startDate + "-" + startTimeInt.toString() + "-0";
 		$(dayOfHourIDTag).html(event.title.toString() + "<br>"
-				+ moment(event.start).format("HH:mm") + "-" + moment(event.end).format("HH:mm"));
+				+ moment(event.start).format("h:mm a") + "-" + moment(event.end).format("h:mm a"));
 		$(dayOfHourIDTag).css("border-top-left-radius", "10px");
 		$(dayOfHourIDTag).css("border-top-right-radius", "10px");
 
@@ -94,15 +86,12 @@ function updateView(events) {
 			var dayOfHourIDTag1 = "#" + startDate + "-" + jStr + "-1";
 			var dayOfHourIDTag2 = "#" + startDate + "-" + jStr + "-2";
 			var dayOfHourIDTag3 = "#" + startDate + "-" + jStr + "-3";
-			//console.log("DAY OF HOUR TAG " + dayOfHourIDTag);
 			
-			//console.log($(dayOfHourIDTag));
 			$(dayOfHourIDTag0).css("background-color", eventColor);
 			$(dayOfHourIDTag1).css("background-color", eventColor);
 			$(dayOfHourIDTag2).css("background-color", eventColor);
 			$(dayOfHourIDTag3).css("background-color", eventColor);
 		}
-		//console.log(endTimeStr);
 		dayOfHourIDTag = "#" + startDate + "-" + (endTimeInt - 2).toString() + "-3";
 		$(dayOfHourIDTag).css("border-bottom-left-radius", "10px");
 		$(dayOfHourIDTag).css("border-bottom-right-radius", "10px");
@@ -116,11 +105,33 @@ function updateView(events) {
 	
 }
 
+// Displays the popup window prompting the user for a list of emails to share the selected calendars with
+function popupShareCalendars() {
+	$("#sharePopup").show();
+}
+
+// Shares the selected calendars with the emails from the box
+function finishSharingCalendars() {
+	$("#sharePopup").hide();
+	
+	var calendarIds = [];
+	$.each($('input[name="calendar"]:checked'), function() {
+		calendarIds.push($(this).val());
+	});
+	var emails = $('input[name="sharingEmails"]').val();
+	
+	stompClient.send("/app/calendar/share", {}, JSON.stringify(
+			{
+				'calendarIds': calendarIds,
+				'emails': emails
+			}));
+}
+
 function populateControls() {
 	// Get the current week and display it
 	var today = moment();
 	var weekOf = today.startOf('week').isoWeekday(1);
-	var weekOfStr = weekOf.format('D/M/YYYY');
+	var weekOfStr = weekOf.format('M/D/YYYY');
 	$('input[name="viewingWeek"]').val(weekOfStr);
 	
 	// Display the user's calendars and select a default
@@ -132,14 +143,15 @@ function populateControls() {
 		html += "<div class='selectCal'><input type='checkbox' class='selectCal' name='calendar' value='" + calendar.id + "' />" + calendar.name + "</div><br />";
 	}
 	html += "<button type='button' onclick='requestWeek();'>View</button>";
+	html += "<button type='button' onclick='popupShareCalendars();'>Share</button>";
 	$("#selectCalendars").html(html);
 	
 	// Show the calendar for this week
 	requestWeek();
 }
 
-$(document).ready(connect());
-$(document).ready( function() {
+$(document).ready(function() {
+	connect();
 	var weekOf = moment("2019-04-08", "YYYY-MM-DD");
 	var daysOfWeek = ["Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"];
 	var datesOfWeek = [weekOf.day(0).format("D"), weekOf.day(1).format("D"), weekOf.day(2).format("D"), weekOf.day(3).format("D"), weekOf.day(4).format("D"), weekOf.day(5).format("D"), weekOf.day(6).format("D")];

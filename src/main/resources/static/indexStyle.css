@@ -2,17 +2,15 @@
 @light: lighten(@blue, 40%);
 @light2: darken(@light, 3%);
 
-body {
+body, html {
 	font-family: "Myriad Pro", Myriad, "Liberation Sans", "Nimbus Sans L", "Helvetica Neue", Helvetica, Arial, sans-serif;
+	height: 100%;
+	width: 100%;
 }
 
-h4 {
-	font-family: "Myriad Pro", Myriad, "Liberation Sans", "Nimbus Sans L", "Helvetica Neue", Helvetica, Arial, sans-serif;
-	text-align: center;
-	font-size: 24px;
-	text-transform: none !important;
-	line-height: 0;
-	font-weight: normal;
+html {
+	background: url('background3.jpg') no-repeat center center fixed;
+	background-size: cover;
 }
 
 label {
@@ -86,7 +84,7 @@ input[type="submit"] {
 	border: 1px solid #cbcbcb; /*light grey*/
 	background-color: #cbcbcb;
 	width: 15%;
-	height: 100%;
+	height: 55%;
 	float: right;
 	border-radius: 25px;
 	padding: 40px;

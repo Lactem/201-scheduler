@@ -4,7 +4,6 @@ function connect() {
     var socket = new SockJS('/calendar-websocket');
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
-        console.log('Connected: ' + frame);
         
         // Listen for responses to the changes we send to the server
         stompClient.subscribe('/topic/calendarChanges', function (calendarChange) {
@@ -13,8 +12,6 @@ function connect() {
             $.ajax({
                 url: ROUTE + "/api/calendar/id/" + updatedCalendar.id
             }).then(function(response) {
-            	console.log('printing response...');
-            	console.log(response);
             	refreshCalendar(response);
             });
         });
@@ -28,18 +25,13 @@ function sendChanges() {
 // Displays the most recently updated calendar without forcing the user to refresh the whole page
 function refreshCalendar(updatedCalendar) {
 	calendar = updatedCalendar;
-	console.log('Refreshing calendar with...');
-	console.log(calendar);
 	
 	var updatedHtml = "<label>Events for calendar: " + calendar.name + "</label><table><tbody>";
     
 	// Update events
 	var eventIndex = 0;
 	for (eventIndex = 0; eventIndex < calendar.events.length; eventIndex++) {
-		console.log('eventIndex: ' + eventIndex);
 		var event = calendar.events[eventIndex];
-		console.log('printing event at ' + eventIndex + '...');
-		console.log(event);
 		
 		updatedHtml += '<tr onclick="editEvent(' + eventIndex + ');">';
 		
@@ -96,15 +88,10 @@ function saveChanges(eventIndex, remove) {
 }
 
 function editEvent(eventIndex) {
-	console.log('editing event with index: ' + eventIndex);
 	var event = calendar.events[eventIndex];
-	console.log('printing event at ' + eventIndex + '...');
-	console.log(event);
 	
 	var date = moment(event.start, 'YYYY-MM-DD');
 	var weekDay = date.isoWeekday(); // 1-7 where 1 is Monday and 7 is Sunday
-	console.log(date);
-	console.log('weekDay: ' + weekDay);
 	var startTime = moment(event.start).format("h:mm a").toUpperCase();
 	var endTime = moment(event.end).format("h:mm a").toUpperCase();
 	
@@ -136,7 +123,7 @@ function populateAddEvent() {
 	// Get the current week
 	var today = moment();
 	var weekOf = today.startOf('week').isoWeekday(1);
-	var weekOfStr = weekOf.format('D/M/YYYY');
+	var weekOfStr = weekOf.format('M/D/YYYY');
 	
 	var html = "<b><label>Add New Event</label></b><br /> \
 		<label for='eventName'>Event Name</label> \
