@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
@@ -52,9 +54,10 @@ public class CalendarController {
 	private RoutingService routingService;
 	
 	@RequestMapping(value="/calendar/new", method=RequestMethod.GET)
-	public String newCalendarGet(@ModelAttribute("webVisitor") WebVisitor webVisitor, Model model) {
+	public String newCalendarGet(@ModelAttribute("webVisitor") WebVisitor webVisitor, Model model,
+			HttpServletRequest request) {
 		model.addAttribute("webVisitor", webVisitor);
-		model.addAttribute("ROUTE", routingService.getRoute());
+		model.addAttribute("ROUTE", "http://" + request.getRequestURL().substring("http://".length()).split("/")[0]);
 		
 		return "create_calendar";
 	}
@@ -129,9 +132,10 @@ public class CalendarController {
 	@RequestMapping(value= "/calendar/edit", method=RequestMethod.POST)
 	public String editCalendar(@ModelAttribute("webVisitor") WebVisitor webVisitor,
 			@RequestParam("calendarId") String calendarId,
-			Model model) {
+			Model model,
+			HttpServletRequest request) {
 		model.addAttribute("webVisitor", webVisitor);
-		model.addAttribute("ROUTE", routingService.getRoute());
+		model.addAttribute("ROUTE", "http://" + request.getRequestURL().substring("http://".length()).split("/")[0]);
 		model.addAttribute("calendar", restTemplate.getForObject(routingService.getRoute() + "/api/calendar/id/" + calendarId, Calendar.class));
 		
 		return "edit_calendar";
