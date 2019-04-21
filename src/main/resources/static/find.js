@@ -46,30 +46,30 @@ function updateView(events) {
 		</tr>";
 	}
 	
-	html +=	"</tbody></table>";
+	html +=	"</tbody></table><br>";
 	$("#viewEvents").html(html);
 }
 
 function populateControls() {
 	
 	// Display the user's calendars and select a default
-	var html = "<b><label>Select Calendar</label></b>";
+	var html = "<b><label>Select Calendar</label><br></b>";
 	console.log(allCalendars);
 	for (i in allCalendars) {
 		calendar = allCalendars[i];
-		html += "<input type='checkbox' name='calendar' value='" + calendar.id + "' />" + calendar.name + "<br />";
+		html += "<br><div class='selectCal'><input type='checkbox' name='calendar' value='" + calendar.id + "' />" + calendar.name + "<br />";
 		
 		// Add view button
 		html += "<form action='/calendar/view' method='POST'>";
 		html += "<input type='hidden' name='calendarId' value=" + calendar.id + " />";
 		html += "<input type='hidden' name='webVisitor' value=" + webVisitor + " />";
-		html += "<button type='submit'>View Calendar</button></form>";
+		html += "<button class='submitEditSelect' type='submit'>View Calendar</button></form>";
 		html += "<form action='/calendar/edit' method='POST'>";
 		html += "<input type='hidden' name='calendarId' value=" + calendar.id + " />";
 		html += "<input type='hidden' name='webVisitor' value=" + webVisitor + " />";
-		html += "<button type='submit'>Edit Calendar</button></form>";
+		html += "<button class='submitEditSelect' type='submit'>Edit Calendar</button></form></div>";
 	}
-	html += "<button type='button' onclick='requestConflicts();'>Check Conflicts</button>";
+	html += "<button id='checkConflicts' type='button' onclick='requestConflicts();'>Check Conflicts</button>";
 	$("#selectCalendars").html(html);
 		
 }
