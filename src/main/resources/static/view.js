@@ -39,6 +39,7 @@ function clearCalendar() {
 				if(j < 10) jStr = "0" + j.toString();				
 				var curSelector = "#" + i + "-" + jStr + "-" + k;
 				$(curSelector).empty();
+				$(curSelector).css("background-color", "white");
 			}
 		}
 	}
