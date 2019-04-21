@@ -1,6 +1,5 @@
-@blue: #626E7E;
-@light: lighten(@blue, 40%);
-@light2: darken(@light, 3%);
+/* #A0A8B1: light grey*/
+/*#A0A8B12: darken(#A0A8B1, 3%);*/
 
 body {
 	font-family: "Myriad Pro", Myriad, "Liberation Sans", "Nimbus Sans L", "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -50,11 +49,15 @@ input[type="text"] {
 	margin-bottom: 50px;
 }
 
+.border_bottom{
+	border-bottom: 1px solid #c6cad0;
+}
+
 #viewEvents thead{
 		tr{
 			th{
-				background: @blue;
-				color: @light;
+				background: #626E7E;
+				color: #A0A8B1;
 				padding: 0.5em;
 				overflow: hidden;
 
@@ -75,8 +78,8 @@ input[type="text"] {
 					padding: 5px;
 					line-height: 1.8;
 					&.active{
-						background: @light;
-						color: @blue;
+						background: #A0A8B1;
+						color: #626E7E;
 					}
 				}
 				
@@ -95,34 +98,35 @@ input[type="text"] {
   
 #viewEvents tbody{
    tr{
-		background: @light;
+		background: #A0A8B1;
 		&:nth-child(odd) {
-       		background:@light2;
+       		background:#A0A8B12;
 		}
    	}
     &:nth-child(4n+0){
 	    td{
-	       border-bottom:1px solid @blue;
+	       border-bottom:1px solid #626E7E;
 	    }
 	}
 }
 #viewEvents td{
    text-align: center;
    vertical-align: middle;
-   border-left: 1px solid @blue;
+   /*border-left: 0.5px solid #626E7E;*/ /* blue */
+   /*border-right: 0.5px solid #626E7E;*/
    position: relative;
    height: 15px;
    cursor: pointer;
 
 	&:last-child{
-      	border-right:1px solid @blue;
+      	border-right:1px solid #626E7E;
     }
 	&.hour {
 	    font-size: 2em;
 	    padding: 0;
-	    color: @blue;
+	    color: #626E7E;
 	    background:#fff;
-	    border-bottom:1px solid @blue;
+	    border-bottom:1px solid #626E7E;
 	    border-collapse: separate;
 	    min-width: 100px;
 	    cursor: default;
@@ -178,8 +182,8 @@ input[type="text"] {
 					padding: 5px;
 	
 					&.active{
-						background: @light;
-						color: @blue;
+						background: #A0A8B1;
+						color: #626E7E;
 					}
 				}
 			}

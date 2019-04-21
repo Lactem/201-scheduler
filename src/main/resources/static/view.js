@@ -36,9 +36,21 @@ function requestWeek() {
 			}));
 }
 
-
+function clearCalendar() {
+	for(var i = 0; i < 7; i++) {
+		for(var j = 8; j < 24; j+=2) {
+			for(var k = 0; k < 4; k++) {
+				var jStr = j.toString();
+				if(j < 10) jStr = "0" + j.toString();				
+				var curSelector = "#" + i + "-" + jStr + "-" + k;
+				$(curSelector).empty();
+			}
+		}
+	}
+}
 
 function updateView(events) {
+	clearCalendar();
 	if(events.length == 0) return;
 	var weekOf = moment(events[0].weekOf);
 	var daysOfWeek = ["Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"];
@@ -147,7 +159,7 @@ $(document).ready( function() {
 		for(var j = 0; j < 4; j++) {
 			html += "<tr>";
 			if(j==0) {
-				html += "<td id = '" + currHr.format("HH:mm") + "' class='hour' rowspan='4'> \
+				html += "<td style='border-top: 1px solid #c6cad0' id = '" + currHr.format("HH:mm") + "' class='hour' rowspan='4'> \
 						<span>" + currHr.format("HH:mm") + "</span></td>";
 			}
 						
