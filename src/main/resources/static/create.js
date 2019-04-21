@@ -84,7 +84,7 @@ $(document).ready(function() {
 	// Get the current week
 	var today = moment();
 	var weekOf = today.startOf('week').isoWeekday(1);
-	var weekOfStr = weekOf.format('D/M/YYYY');
+	var weekOfStr = weekOf.format('M/D/YYYY');
 	$("#weekOf").val(weekOfStr);
 });
 

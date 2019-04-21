@@ -1,5 +1,6 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
+<link rel="stylesheet" type="text/css" href="/viewCalStyle.css"/>
 <head>
     <title>201-scheduler - View Calendar</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -28,6 +29,9 @@
 	<div id="controls">
 		<b><label for="viewingWeek">Viewing for the Week of</label></b><br />
 		<input type="text" name="viewingWeek" /><br /><br />
+		
+		<div id="Calendar" class="Calendar">
+		</div>
 		
 		<!-- JavaScript updates this with a list of calendars to choose from -->
 		<div id="selectCalendars"></div>
