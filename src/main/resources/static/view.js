@@ -66,11 +66,14 @@ function updateView(events) {
 		var endTimeStr = endTimeInt.toString();
 		if(endTimeInt < 10) endTimeStr = "0" + endTimeInt.toString();
 		
-		console.log(event.title);
+		//console.log(event.title);
 		
 		var dayOfHourIDTag = "#" + startDate + "-" + startTimeInt.toString() + "-0";
 		$(dayOfHourIDTag).html(event.title.toString() + "<br>"
 				+ moment(event.start).format("HH:mm") + "-" + moment(event.end).format("HH:mm"));
+		$(dayOfHourIDTag).css("border-top-left-radius", "10px");
+		$(dayOfHourIDTag).css("border-top-right-radius", "10px");
+
 		for(var j = startTimeInt; j < endTimeInt; j+=2) {
 			var jStr = j.toString();
 			if(j < 10) jStr = "0" + j.toString();
@@ -87,6 +90,10 @@ function updateView(events) {
 			$(dayOfHourIDTag2).css("background-color", eventColor);
 			$(dayOfHourIDTag3).css("background-color", eventColor);
 		}
+		//console.log(endTimeStr);
+		dayOfHourIDTag = "#" + startDate + "-" + (endTimeInt - 2).toString() + "-3";
+		$(dayOfHourIDTag).css("border-bottom-left-radius", "10px");
+		$(dayOfHourIDTag).css("border-bottom-right-radius", "10px");
 		/*html += "<tr> \
 			<td>" + event.title + "</td> \
 			<td>Starts: " + event.start + "</td> \
