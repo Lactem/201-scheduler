@@ -19,7 +19,7 @@ $(document).ready( function() {
 			html += "<tr>";
 			if(j==0) {
 				html += "<td id = '" + currHr.format("HH:mm") + "' class='hour' rowspan='4'> \
-						<span>" + currHr.format("HH:mm") + "</span></td>";
+						<span>" + currHr.format("h:mm a") + "</span></td>";
 			}
 						
 			

@@ -1,5 +1,6 @@
 package scheduler.api.calendar;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -84,14 +85,16 @@ public class CalendarRestController {
 	}
 	
 	/**
-	 * Updates the list of users who are allowed to edit a calendar with the given identifier.
+	 * Allows a user to edit a calendar.
 	 */
-	@PutMapping("/api/calendar/updateEditors/{id}")
-	Optional<Calendar> updateEditors(@RequestBody List<String> editorEmails, @PathVariable String id) {
-		
-		return calendarRepo.findById(id)
+	@PutMapping("/api/calendar/share/{calendarId}")
+	Optional<Calendar> shareCalendar(@RequestBody String sharedEmail, @PathVariable String calendarId) {
+		return calendarRepo.findById(calendarId)
 			.map(calendar -> {
-				calendar.setEditorEmails(editorEmails);
+				if (calendar == null) return null;
+				
+				if (calendar.getEditorEmails() == null) calendar.setEditorEmails(new ArrayList<>());
+				calendar.getEditorEmails().add(sharedEmail);
 				return calendarRepo.save(calendar);
 			});
 	}
@@ -104,6 +107,7 @@ public class CalendarRestController {
 		
 		return calendarRepo.findById(id)
 			.map(calendar -> {
+				if (calendar == null) return null;
 				calendar.setEvents(events);
 				return calendarRepo.save(calendar);
 			});

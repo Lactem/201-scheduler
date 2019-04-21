@@ -62,7 +62,7 @@ function updateView(events) {
 		
 		var dayOfHourIDTag = "#" + startDate + "-" + startTimeInt.toString() + "-0";
 		$(dayOfHourIDTag).html(event.title.toString() + "<br>"
-				+ moment(event.start).format("HH:mm") + "-" + moment(event.end).format("HH:mm"));
+				+ moment(event.start).format("h:mm a") + "-" + moment(event.end).format("h:mm a"));
 		$(dayOfHourIDTag).css("border-top-left-radius", "10px");
 		$(dayOfHourIDTag).css("border-top-right-radius", "10px");
 
@@ -93,6 +93,28 @@ function updateView(events) {
 	
 }
 
+// Displays the popup window prompting the user for a list of emails to share the selected calendars with
+function popupShareCalendars() {
+	$("#sharePopup").show();
+}
+
+// Shares the selected calendars with the emails from the box
+function finishSharingCalendars() {
+	$("#sharePopup").hide();
+	
+	var calendarIds = [];
+	$.each($('input[name="calendar"]:checked'), function() {
+		calendarIds.push($(this).val());
+	});
+	var emails = $('input[name="sharingEmails"]').val();
+	
+	stompClient.send("/app/calendar/share", {}, JSON.stringify(
+			{
+				'calendarIds': calendarIds,
+				'emails': emails
+			}));
+}
+
 function populateControls() {
 	// Get the current week and display it
 	var today = moment();
@@ -109,6 +131,7 @@ function populateControls() {
 		html += "<div class='selectCal'><input type='checkbox' class='selectCal' name='calendar' value='" + calendar.id + "' />" + calendar.name + "</div><br />";
 	}
 	html += "<button type='button' onclick='requestWeek();'>View</button>";
+	html += "<button type='button' onclick='popupShareCalendars();'>Share</button>";
 	$("#selectCalendars").html(html);
 	
 	// Show the calendar for this week
@@ -137,7 +160,7 @@ $(document).ready(function() {
 			html += "<tr>";
 			if(j==0) {
 				html += "<td id = '" + currHr.format("HH:mm") + "' class='hour' rowspan='4'> \
-						<span>" + currHr.format("HH:mm") + "</span></td>";
+						<span>" + currHr.format("h:mm a") + "</span></td>";
 			}
 						
 			

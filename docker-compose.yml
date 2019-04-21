@@ -18,7 +18,7 @@ services:
     networks:
       - scheduler-network
     ports:
-      - "8000:8000" # Make sure this port matches server.port in application_docker.properties, as well as the port in the global HOST variable in SchedulerApplication.java (src/main/java/scheduler)
+      - "8000:8000" # Make sure this port matches "server.port" in application_docker.properties (under src/main/resources)
     depends_on:
       - scheduler-mongo
 

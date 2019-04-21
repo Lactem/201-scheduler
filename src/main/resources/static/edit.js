@@ -123,7 +123,7 @@ function populateAddEvent() {
 	// Get the current week
 	var today = moment();
 	var weekOf = today.startOf('week').isoWeekday(1);
-	var weekOfStr = weekOf.format('D/M/YYYY');
+	var weekOfStr = weekOf.format('M/D/YYYY');
 	
 	var html = "<b><label>Add New Event</label></b><br /> \
 		<label for='eventName'>Event Name</label> \
