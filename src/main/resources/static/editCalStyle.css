@@ -2,6 +2,11 @@ body {
 	font-family: "Myriad Pro", Myriad, "Liberation Sans", "Nimbus Sans L", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
+html {
+	background: url('background3.jpg') no-repeat center center fixed;
+	background-size: cover;
+}
+
 h4 {
 	font-size: 20px;
 	text-transform: none;
@@ -10,16 +15,35 @@ h4 {
 	margin: none;
 }
 
+#blockContainer {
+	diplay: flex;
+	justify-content: center;
+}
+
 #newCalendar {
 	border: 3px solid #cbcbcb; /*light grey*/
 	background-color: white;
 	margin-left: 20px;
 	margin-top: 20px;
+	/*padding-top: 20px;*/
+	/*padding-bottom: 40px;*/
+	/*padding-left: 20px;*/
+	/*padding-right: 10px;*/
+}
+
+#addEvent {
+	border: 3px solid #cbcbcb; /*light grey*/
+	background-color: white;
+	float: center;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 20px;
 	padding-top: 20px;
 	padding-bottom: 40px;
 	padding-left: 40px;
 	padding-right: 40px;
-	width: 30%;
+	width: 60%;
+	display: inline-block;
 }
 
 
@@ -29,6 +53,7 @@ input[type="text"] {
 }
 
 #viewEvents table {
+
 	font-family:sans-serif;
 	width: 90%;
 	border-spacing: 0;
@@ -83,6 +108,7 @@ input[type="text"] {
 		}
 	}
 }
+
   
 #viewEvents tbody{
    tr{

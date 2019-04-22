@@ -25,15 +25,26 @@
 <label th:text="'Calendar id: ' + ${calendar.id}"></label><br />
 
 <!-- JavaScript uses this div to display the calendar and edits from other users -->
-<div id="viewEvents"></div>
+<table >
+	<tr>
+		<td style="width: 80%">
+			<div id="viewEvents"></div>
+		</td>
+	
+	
+<!-- JavaScript uses this div to add a new event -->
+		<td>
+			<div id="addEvent"></div>
+		</td>
+	</tr>
+</table>
 
 <br /><br /><br />
 
 <!-- JavaScript uses this div to edit an event -->
 <div id="editEvent"></div>
 
-<!-- JavaScript uses this div to add a new event -->
-<div id="addEvent"></div>
+
 
 </body>
 </html>

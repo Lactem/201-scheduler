@@ -229,12 +229,14 @@ function generateCalendar () {
 	if(calendar.events.length != 0) weekOf = moment(calendar.events[0].weekOf);
 	var daysOfWeek = ["Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"];
 	var datesOfWeek = [weekOf.day(0).format("D"), weekOf.day(1).format("D"), weekOf.day(2).format("D"), weekOf.day(3).format("D"), weekOf.day(4).format("D"), weekOf.day(5).format("D"), weekOf.day(6).format("D")];
-	var html = "<br><br><table><thead><tr><th></th>"; //<tbody>
+	var html = "<br><br><table id='newCalendar'><thead><tr style='border-bottom: 3px solid #cbcbcb;'><th style='border-right: 3px solid #cbcbcb; border-bottom: 3px solid #cbcbcb;'></th>"; //<tbody>
 	
-	for(var i = 0; i < 7; i++) {
+	html += "<th style='border-bottom: 3px solid #cbcbcb;'><span id='date" + 0 + "' class='day'><br>" +  datesOfWeek[0] + "</span> \
+	<span class='short'>" + daysOfWeek[0] + "<br><br><br></span></th>";
+	for(var i = 1; i < 7; i++) {
 		var day = i+1;
-		html += "<th><span id='date" + i + "' class='day'>" +  datesOfWeek[i] + "</span> \
-				<span class='short'>" + daysOfWeek[i] + "</span></th>";
+		html += "<th style='border-left: 3px solid #cbcbcb; border-bottom: 3px solid #cbcbcb;'><span id='date" + i + "' class='day'><br>" +  datesOfWeek[i] + "</span> \
+				<span class='short'>" + daysOfWeek[i] + "<br><br><br></span></th>";
 	}
 	
 	html += "</tr></thead><tbody>";
@@ -245,7 +247,9 @@ function generateCalendar () {
 		for(var j = 0; j < 4; j++) {
 			html += "<tr>";
 			if(j==0) {
-				html += "<td style='border-top: 1px solid #c6cad0' id = '" + currHr.format("HH:mm") + "' class='hour' rowspan='4'> \
+				if(currHr.format("HH:mm").toString() == "08:00") html += "<td style='border-right: 3px solid #cbcbcb;' id = '" + currHr.format("HH:mm") + "' class='hour' rowspan='4'> \
+				<span>" + currHr.format("h:mm a") + "</span></td>";
+				else html += "<td style='border-top: 3px solid #cbcbcb; border-right: 3px solid #cbcbcb;' id = '" + currHr.format("HH:mm") + "' class='hour' rowspan='4'> \
 						<span>" + currHr.format("h:mm a") + "</span></td>";
 			}
 						
