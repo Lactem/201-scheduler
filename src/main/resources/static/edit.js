@@ -210,8 +210,8 @@ function editEvent(eventIndex) {
     	<input type='checkbox' name='Sunday'" + (weekDay == 0 ? "checked" : "") + " />Sunday<br /><br /> \
 		<label for='notes'>Notes</label> \
 		<input type='text' name='notes' value='Note to self...' /><br /><br /> \
-    	<button type='button' onclick='saveChanges(" + eventIndex + ", false);'>Save Changes</button> \
-    	<button type='button' onclick='saveChanges(" + eventIndex + ", true);'>Delete Event</button>";
+    	<button type='button' class='submitButton' onclick='saveChanges(" + eventIndex + ", false);'>Save Changes</button> \
+    	<button type='button' class='submitButton' onclick='saveChanges(" + eventIndex + ", true);'>Delete Event</button>";
 	$("#editEvent").html(html);
 	$("#modal").show();
 }
@@ -241,7 +241,7 @@ function populateAddEvent() {
     	<input type='checkbox' name='Sunday' />Sunday<br /><br /> \
 		<label for='notes'>Notes</label> \
 		<input type='text' name='notes' value='Note to self...' /><br /><br /> \
-    	<button type='button' onclick='saveChanges(-1);'>Add Event</button>"; // -1 represents adding a new event
+    	<button type='button' class='submitButton' onclick='saveChanges(-1);'>Add Event</button>"; // -1 represents adding a new event
 	$("#addEvent").html(html);
 }
 

@@ -73,16 +73,27 @@ h4 {
 #addEvent {
 	border: 3px solid #cbcbcb; /*light grey*/
 	background-color: white;
-	float: center;
-	margin-left: auto;
-	margin-right: auto;
-	margin-top: 20px;
+	margin-left: 0%;
+	margin-right: 10%;
+	margin-top: 0%;
+	margin-bottom: 40%;
 	padding-top: 20px;
 	padding-bottom: 40px;
 	padding-left: 40px;
 	padding-right: 40px;
-	width: 60%;
+	width: 70%;
 	display: inline-block;
+}
+
+.submitButton {
+	padding-top: 10px;
+	color: white;
+	padding-bottom: 10px;
+	padding-left: 10px;
+	padding-right: 10px;
+	font-size: 14px;
+	background: #ba8edd; /*light purple*/
+	border-radius: 30px;
 }
 
 
