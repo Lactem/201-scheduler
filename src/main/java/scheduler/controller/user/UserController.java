@@ -47,7 +47,7 @@ public class UserController {
 		try {
 			restTemplate.getForObject(routingService.getRoute() + "/api/user/" + email, User.class);
 			model.addAttribute("registerErr", "That email address is already associated with an account.");
-			return "index";
+			return "redirect:/index";
 		} catch (HttpClientErrorException.NotFound ignored) {}
 		
 		// Verify that the password isn't empty
