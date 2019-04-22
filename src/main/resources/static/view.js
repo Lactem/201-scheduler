@@ -173,7 +173,7 @@ $(document).ready(function() {
 			html += "<tr>";
 			if(j==0) {
 				html += "<td style='border-top: 1px solid #c6cad0' id = '" + currHr.format("HH:mm") + "' class='hour' rowspan='4'> \
-						<span>" + currHr.format("HH:mm") + "</span></td>";
+						<span>" + currHr.format("h:mm a") + "</span></td>";
 			}
 						
 			

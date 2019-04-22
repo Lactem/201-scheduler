@@ -43,6 +43,8 @@
 	    <p style="font-size:12px; text-align:center;">Already have an account? Log in <a href="#" onclick="swapRegLogin();">here!</a></p>
     </div>
     
+   <input type='hidden' name='hidden' id='visitorLoggedIn' th:value="${webVisitor.loggedIn}">
+    
     <br />
     <p th:if="${registerErr}">Error logging in: <span th:text="${registerErr}"></span></p>
     <!-- END REGISTER DEMO -->
