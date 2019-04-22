@@ -51,9 +51,11 @@ h4 {
 #editEvent {
 	border: 3px solid #cbcbcb; /*light grey*/
 	background-color: white;
-	margin-left: 20px;
+	margin-left: 30%;
+	margin-right: 50%;
 	margin-top: 20px;
 	padding: 40px;
+	float: center;
 	width: 20%;
 }
 

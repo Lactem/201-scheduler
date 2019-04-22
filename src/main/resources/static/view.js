@@ -82,13 +82,11 @@ function updateView(events) {
 		$(dayOfHourIDTag).css("border-top-right-radius", "10px");
 
 		for(var j = startTimeInt; j < endTimeInt; j+=2) {
-			var jStr = j.toString();
-			if(j < 10) jStr = "0" + j.toString();
-			var hourIDTag = "#" + jStr;
-			var dayOfHourIDTag0 = "#" + startDate + "-" + jStr + "-0";
-			var dayOfHourIDTag1 = "#" + startDate + "-" + jStr + "-1";
-			var dayOfHourIDTag2 = "#" + startDate + "-" + jStr + "-2";
-			var dayOfHourIDTag3 = "#" + startDate + "-" + jStr + "-3";
+			var hourIDTag = "#" + j.toString();
+			var dayOfHourIDTag0 = "#" + startDate + "-" + j.toString() + "-0";
+			var dayOfHourIDTag1 = "#" + startDate + "-" + j.toString() + "-1";
+			var dayOfHourIDTag2 = "#" + startDate + "-" + j.toString() + "-2";
+			var dayOfHourIDTag3 = "#" + startDate + "-" + j.toString() + "-3";
 			
 			$(dayOfHourIDTag0).css("background-color", eventColor);
 			$(dayOfHourIDTag1).css("background-color", eventColor);
@@ -185,13 +183,13 @@ $(document).ready(function() {
 			}
 						
 			
-			html += "<td id='0-" + currHr.format("HH") + "-" + j.toString() + "'></td> \
-					<td id='1-" + currHr.format("HH") + "-" + j.toString() + "'></td> \
-					<td id='2-" + currHr.format("HH") + "-" + j.toString() + "'></td> \
-					<td id='3-" + currHr.format("HH") + "-" + j.toString() + "'></td> \
-					<td id='4-" + currHr.format("HH") + "-" + j.toString() + "'></td> \
-					<td id='5-" + currHr.format("HH") + "-" + j.toString() + "'></td> \
-					<td id='6-" + currHr.format("HH") + "-" + j.toString() + "'></td> \
+			html += "<td id='0-" + currHr.format("H") + "-" + j.toString() + "'></td> \
+					<td id='1-" + currHr.format("H") + "-" + j.toString() + "'></td> \
+					<td id='2-" + currHr.format("H") + "-" + j.toString() + "'></td> \
+					<td id='3-" + currHr.format("H") + "-" + j.toString() + "'></td> \
+					<td id='4-" + currHr.format("H") + "-" + j.toString() + "'></td> \
+					<td id='5-" + currHr.format("H") + "-" + j.toString() + "'></td> \
+					<td id='6-" + currHr.format("H") + "-" + j.toString() + "'></td> \
 					</tr>";
 			
 			if(j == 3) currHr = moment(currHr).add(2, "hours");
