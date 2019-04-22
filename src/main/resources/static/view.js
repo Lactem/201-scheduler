@@ -40,10 +40,19 @@ function clearCalendar() {
 				var curSelector = "#" + i + "-" + jStr + "-" + k;
 				$(curSelector).empty();
 				$(curSelector).css("background-color", "");
+				$(curSelector).css("border-top", "");
+				$(curSelector).css("border-left", "");
+				$(curSelector).css("border-right", "");
+				$(curSelector).css("border-bottom", "");
+				$(curSelector).css("border-top-left-radius", "");
+				$(curSelector).css("border-top-right-radius", "");
+				$(curSelector).css("border-bottom-left-radius", "");
+				$(curSelector).css("border-bottom-right-radius", "");
 			}
 		}
 	}
 }
+
 
 function updateView(events) {
 	clearCalendar();
@@ -80,6 +89,7 @@ function updateView(events) {
 				+ moment(event.start).format("h:mm a") + "-" + moment(event.end).format("h:mm a"));
 		$(dayOfHourIDTag).css("border-top-left-radius", "10px");
 		$(dayOfHourIDTag).css("border-top-right-radius", "10px");
+		$(dayOfHourIDTag).css("border-top", "3px solid white");
 
 		for(var j = startTimeInt; j < endTimeInt; j+=2) {
 			var hourIDTag = "#" + j.toString();
@@ -92,10 +102,19 @@ function updateView(events) {
 			$(dayOfHourIDTag1).css("background-color", eventColor);
 			$(dayOfHourIDTag2).css("background-color", eventColor);
 			$(dayOfHourIDTag3).css("background-color", eventColor);
+			$(dayOfHourIDTag0).css("border-left", "3px solid white");
+			$(dayOfHourIDTag0).css("border-right", "3px solid white");
+			$(dayOfHourIDTag1).css("border-left", "3px solid white");
+			$(dayOfHourIDTag1).css("border-right", "3px solid white");
+			$(dayOfHourIDTag2).css("border-left", "3px solid white");
+			$(dayOfHourIDTag2).css("border-right", "3px solid white");
+			$(dayOfHourIDTag3).css("border-left", "3px solid white");
+			$(dayOfHourIDTag3).css("border-right", "3px solid white");
 		}
 		dayOfHourIDTag = "#" + startDate + "-" + (endTimeInt - 2).toString() + "-3";
 		$(dayOfHourIDTag).css("border-bottom-left-radius", "10px");
 		$(dayOfHourIDTag).css("border-bottom-right-radius", "10px");
+		$(dayOfHourIDTag).css("border-bottom", "3px solid white");
 		/*html += "<tr> \
 			<td>" + event.title + "</td> \
 			<td>Starts: " + event.start + "</td> \
