@@ -20,6 +20,43 @@ h4 {
 	justify-content: center;
 }
 
+.modal {
+	display: none;
+	position: fixed;
+	z-index: 1;
+	padding-top: 100px;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+	background-color: rgba(0,0,0,0);
+}
+
+.close {
+	color: #aaaaaa;
+	float: right;
+	font-size: 28px;
+	font-weight: bold;
+	font-family: sans-serif;
+}
+
+.close:hover,
+.close:focus {
+	color: #000;
+	text-decoration: none;
+	cursor: pointer;
+}
+
+#editEvent {
+	border: 3px solid #cbcbcb; /*light grey*/
+	background-color: white;
+	margin-left: 20px;
+	margin-top: 20px;
+	padding: 40px;
+	width: 20%;
+}
+
 #newCalendar {
 	border: 3px solid #cbcbcb; /*light grey*/
 	background-color: white;

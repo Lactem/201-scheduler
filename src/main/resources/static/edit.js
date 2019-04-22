@@ -1,4 +1,6 @@
 var stompClient = null;
+var modal = document.getElementById('modal');
+var close = document.getElementById('closeButtonEdit');
 
 function connect() {
     var socket = new SockJS('/calendar-websocket');
@@ -30,10 +32,10 @@ function clearCalendar() {
 				$(curSelector).html('');
 				$(curSelector).empty();
 				$(curSelector).css("background-color", "");
-				$(curSelector).css("border-top-left-radius", "");
-				$(curSelector).css("border-top-right-radius", "");
-				$(curSelector).css("border-bottom-left-radius", "");
-				$(curSelector).css("border-bottom-right-radius", "");
+				$(curSelector).css("border-top-left-radius", "0px");
+				$(curSelector).css("border-top-right-radius", "0px");
+				$(curSelector).css("border-bottom-left-radius", "0px");
+				$(curSelector).css("border-bottom-right-radius", "0px");
 			}
 		}
 	}
@@ -44,6 +46,7 @@ function nearestTime(time) {
 	if(curTime%2 != 0) curTime += 1;
 	return curTime;
 }
+
 
 // Displays the most recently updated calendar without forcing the user to refresh the whole page
 function refreshCalendar(updatedCalendar) {
@@ -104,11 +107,15 @@ function refreshCalendar(updatedCalendar) {
 			
 			$(curSelector3).css("background-color", eventColor);
 			$(curSelector3).attr('onClick', 'editEvent(' + eventIndex + ');');
+			$(curSelector3).css("border-bottom-left-radius", "0px");
+			$(curSelector3).css("border-bottom-right-radius", "0px");
+			
+			if(curTime == endTimeInt - 2) {
+				$(curSelector3).css("border-bottom-left-radius", "10px");
+				$(curSelector3).css("border-bottom-right-radius", "10px");
+			}
 		}
-		
-		dayOfHourIDTag = "#" + eventDayOfWeek + "-" + (endTimeInt - 2).toString() + "-3";
-		$(dayOfHourIDTag).css("border-bottom-left-radius", "10px");
-		$(dayOfHourIDTag).css("border-bottom-right-radius", "10px");
+		console.log(endTimeInt);
 		
 		/*updatedHtml += '<tr onclick="editEvent(' + eventIndex + ');">';
 		
@@ -125,7 +132,10 @@ function refreshCalendar(updatedCalendar) {
     $("#displayCalendar").html(updatedHtml);*/
     
     // Clear the updates so the user isn't updating an old event
+	
     $("#editEvent").html('');
+    //$("#editEvent").hide();
+    $("#modal").hide();
 }
 
 /**
@@ -162,16 +172,25 @@ function saveChanges(eventIndex, remove) {
 				'remove': remove,
 				'editedEvent': eventData
 			}));
+	$("#modal").hide();
+	//$("#editEvent").hide();
+}
+
+function modalHide() {
+	$("#editEvent").hide();
+	$("#modal").hide();
 }
 
 function editEvent(eventIndex) {
+	$("#editEvent").show();
+	$("#modal").show();
 	var event = calendar.events[eventIndex];
 	var date = moment(event.start);
 	var weekDay = date.day(); // 1-7 where 1 is Monday and 7 is Sunday
 	var startTime = moment(event.start).format("h:mm a").toUpperCase();
 	var endTime = moment(event.end).format("h:mm a").toUpperCase();
 	
-	var html = "<b><label>Edit Event</label></b><br /> \
+	var html = "<b><span id='closeButtonEdit' class='close' onclick='modalHide()'>&times;</span><label>Edit Event</label></b><br /> \
 		<label for='eventName'>Event Name</label> \
 		<input type='text' name='title' value='" + event.title + "'/><br /> \
 		<label for='startTime'>Start Time</label> \
@@ -193,6 +212,7 @@ function editEvent(eventIndex) {
     	<button type='button' onclick='saveChanges(" + eventIndex + ", false);'>Save Changes</button> \
     	<button type='button' onclick='saveChanges(" + eventIndex + ", true);'>Delete Event</button>";
 	$("#editEvent").html(html);
+	$("#modal").show();
 }
 
 function populateAddEvent() {

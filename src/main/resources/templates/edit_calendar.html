@@ -11,6 +11,16 @@
     <script th:inline="javascript">
     	var calendar = /*[[${calendar}]]*/ null;
     	var ROUTE = /*[[${ROUTE}]]*/ 'http://localhost:8080';
+    	var close = document.getElementById('closeButtonEdit')[0];
+    	window.onclick = function(event) {
+    		if(event.target == modal) {
+    			$("#modal").hide();
+    		}
+    	}
+
+    	close.onclick = function() {
+    		$("#modal").hide();
+    	}
     </script>
     <script th:src="@{/edit.js}"></script>
 </head>
@@ -42,7 +52,9 @@
 <br /><br /><br />
 
 <!-- JavaScript uses this div to edit an event -->
-<div id="editEvent"></div>
+<div id='modal' class='modal'>
+	<div id="editEvent"></div>
+</div>
 
 
 
