@@ -51,9 +51,11 @@ function updateView(events) {
 	var weekOf = moment(events[0].weekOf);
 	var daysOfWeek = ["Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"];
 	var datesOfWeek = [weekOf.day(0).format("D"), weekOf.day(1).format("D"), weekOf.day(2).format("D"), weekOf.day(3).format("D"), weekOf.day(4).format("D"), weekOf.day(5).format("D"), weekOf.day(6).format("D")];
+	
 	for(var i = 0; i < 7; i++) {
 		$("#date" + i).html(datesOfWeek[i]);
 	}
+	
 	var eventColors = ["#f49242", "#f441b2", "#7cf441", "#70cdf4", "#c97df2", "#f28a8f", "#f75960", "#f7ec88", "#8e8af7", "#fcb58f"];
 	
 	for (i in events) {

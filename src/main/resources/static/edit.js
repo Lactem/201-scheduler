@@ -22,30 +22,107 @@ function sendChanges() {
 	stompClient.send("/app/calendar/submitChanges", {}, JSON.stringify({'calendarId': calendar.id, 'updatedEvents': calendar.events}));
 }
 
+function clearCalendar() {
+	for(var i = 0; i <= 7; i++) {
+		for(var j = 8; j < 24; j++) {
+			for(var k = 0; k < 4; k++) {		
+				var curSelector = "#" + i + "-" + j.toString() + "-" + k.toString();
+				$(curSelector).html('');
+				$(curSelector).empty();
+				$(curSelector).css("background-color", "");
+				$(curSelector).css("border-top-left-radius", "");
+				$(curSelector).css("border-top-right-radius", "");
+				$(curSelector).css("border-bottom-left-radius", "");
+				$(curSelector).css("border-bottom-right-radius", "");
+			}
+		}
+	}
+}
+
+function nearestTime(time) {
+	var curTime = parseInt(time);
+	if(curTime%2 != 0) curTime += 1;
+	return curTime;
+}
+
 // Displays the most recently updated calendar without forcing the user to refresh the whole page
 function refreshCalendar(updatedCalendar) {
+	clearCalendar();
+	
 	calendar = updatedCalendar;
 	
 	var updatedHtml = "<label>Events for calendar: " + calendar.name + "</label><table><tbody>";
     
 	// Update events
-	var eventIndex = 0;
-	for (eventIndex = 0; eventIndex < calendar.events.length; eventIndex++) {
+
+	var events = calendar.events;
+	
+	if(events.length == 0) return;
+	var weekOf = moment(calendar.events[0].weekOf);
+	var daysOfWeek = ["Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"];
+	var datesOfWeek = [weekOf.day(0).format("D"), weekOf.day(1).format("D"), weekOf.day(2).format("D"), weekOf.day(3).format("D"), weekOf.day(4).format("D"), weekOf.day(5).format("D"), weekOf.day(6).format("D")];
+	var eventColors = ["#f49242", "#f441b2", "#7cf441", "#70cdf4", "#c97df2", "#f28a8f", "#f75960", "#f7ec88", "#8e8af7", "#fcb58f"];
+	for (var eventIndex = 0; eventIndex < events.length; eventIndex++) {
 		var event = calendar.events[eventIndex];
 		
-		updatedHtml += '<tr onclick="editEvent(' + eventIndex + ');">';
+		var eventColor = eventColors[eventIndex%10];
+		
+		var eventDayOfWeek = moment(event.start).day();
+		
+		var startTime = moment(event.start).format("h:mm a");
+		var endTime = moment(event.end).format("h:mm a");
+		
+		var startTimeInt = parseInt(moment(event.start).format("H")); //for JQuery tag selection
+		startTimeInt = nearestTime(startTimeInt);
+		
+		var endTimeInt = parseInt(moment(event.end).format("H")); //for JQuery tag selection
+		endTimeInt = nearestTime(endTimeInt);
+		
+		var dayOfHourIDTag = "#" + eventDayOfWeek + "-" + startTimeInt.toString() + "-0";
+		$(dayOfHourIDTag).attr('onClick', 'editEvent(' + eventIndex + ');');
+		
+		
+		$(dayOfHourIDTag).html(event.title.toString() + "<br>"
+				+ startTime + "-" + endTime);
+		$(dayOfHourIDTag).css("border-top-left-radius", "10px");
+		$(dayOfHourIDTag).css("border-top-right-radius", "10px");
+		
+		for(curTime = startTimeInt; curTime < endTimeInt; curTime += 2) {
+			var curSelector0 = "#" + eventDayOfWeek + "-" + curTime.toString() + "-0";
+			var curSelector1 = "#" + eventDayOfWeek + "-" + curTime.toString() + "-1";
+			var curSelector2 = "#" + eventDayOfWeek + "-" + curTime.toString() + "-2";
+			var curSelector3 = "#" + eventDayOfWeek + "-" + curTime.toString() + "-3";
+			
+			$(curSelector0).css("background-color", eventColor);
+			$(curSelector0).attr('onClick', 'editEvent(' + eventIndex + ');');
+			
+			$(curSelector1).css("background-color", eventColor);
+			$(curSelector1).attr('onClick', 'editEvent(' + eventIndex + ');');
+			
+			$(curSelector2).css("background-color", eventColor);
+			$(curSelector2).attr('onClick', 'editEvent(' + eventIndex + ');');
+			
+			$(curSelector3).css("background-color", eventColor);
+			$(curSelector3).attr('onClick', 'editEvent(' + eventIndex + ');');
+		}
+		
+		dayOfHourIDTag = "#" + eventDayOfWeek + "-" + (endTimeInt - 2).toString() + "-3";
+		$(dayOfHourIDTag).css("border-bottom-left-radius", "10px");
+		$(dayOfHourIDTag).css("border-bottom-right-radius", "10px");
+		
+		/*updatedHtml += '<tr onclick="editEvent(' + eventIndex + ');">';
 		
 		updatedHtml += "<td>" + event.title + "</td>";
 		updatedHtml += "<td>Starts:" + event.start + "</td>";
 		updatedHtml += "<td>Ends:" + event.end + "</td>";
 		updatedHtml += "<td>Note:" + event.notes + "</td>";
 		
-		updatedHtml += "</tr>";
+		updatedHtml += "</tr>";*/
 	}
 	
 	// Display updated calendar
-	updatedHtml += "</tbody></table>";
-    $("#displayCalendar").html(updatedHtml);
+	/*updatedHtml += "</tbody></table>";
+    $("#displayCalendar").html(updatedHtml);*/
     
     // Clear the updates so the user isn't updating an old event
     $("#editEvent").html('');
@@ -89,9 +166,8 @@ function saveChanges(eventIndex, remove) {
 
 function editEvent(eventIndex) {
 	var event = calendar.events[eventIndex];
-	
-	var date = moment(event.start, 'YYYY-MM-DD');
-	var weekDay = date.isoWeekday(); // 1-7 where 1 is Monday and 7 is Sunday
+	var date = moment(event.start);
+	var weekDay = date.day(); // 1-7 where 1 is Monday and 7 is Sunday
 	var startTime = moment(event.start).format("h:mm a").toUpperCase();
 	var endTime = moment(event.end).format("h:mm a").toUpperCase();
 	
@@ -111,7 +187,7 @@ function editEvent(eventIndex) {
     	<input type='checkbox' name='Thursday'" + (weekDay == 4 ? "checked" : "") + " />Thursday<br /> \
     	<input type='checkbox' name='Friday'" + (weekDay == 5 ? "checked" : "") + " />Friday<br /> \
     	<input type='checkbox' name='Saturday'" + (weekDay == 6 ? "checked" : "") + " />Saturday<br /> \
-    	<input type='checkbox' name='Sunday'" + (weekDay == 7 ? "checked" : "") + " />Sunday<br /><br /> \
+    	<input type='checkbox' name='Sunday'" + (weekDay == 0 ? "checked" : "") + " />Sunday<br /><br /> \
 		<label for='notes'>Notes</label> \
 		<input type='text' name='notes' value='Note to self...' /><br /><br /> \
     	<button type='button' onclick='saveChanges(" + eventIndex + ", false);'>Save Changes</button> \
@@ -148,8 +224,52 @@ function populateAddEvent() {
 	$("#addEvent").html(html);
 }
 
+function generateCalendar () {
+	var weekOf = moment("2019-04-15", "YYYY-MM-DD");
+	if(calendar.events.length != 0) weekOf = moment(calendar.events[0].weekOf);
+	var daysOfWeek = ["Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"];
+	var datesOfWeek = [weekOf.day(0).format("D"), weekOf.day(1).format("D"), weekOf.day(2).format("D"), weekOf.day(3).format("D"), weekOf.day(4).format("D"), weekOf.day(5).format("D"), weekOf.day(6).format("D")];
+	var html = "<br><br><table><thead><tr><th></th>"; //<tbody>
+	
+	for(var i = 0; i < 7; i++) {
+		var day = i+1;
+		html += "<th><span id='date" + i + "' class='day'>" +  datesOfWeek[i] + "</span> \
+				<span class='short'>" + daysOfWeek[i] + "</span></th>";
+	}
+	
+	html += "</tr></thead><tbody>";
+	
+	var currHr = moment("2018-01-01T08:00:00");
+	
+	for(var i = 0; i < 8; i++) {
+		for(var j = 0; j < 4; j++) {
+			html += "<tr>";
+			if(j==0) {
+				html += "<td style='border-top: 1px solid #c6cad0' id = '" + currHr.format("HH:mm") + "' class='hour' rowspan='4'> \
+						<span>" + currHr.format("h:mm a") + "</span></td>";
+			}
+						
+			
+			html += "<td id='0-" + currHr.format("H") + "-" + j.toString() + "'></td> \
+					<td id='1-" + currHr.format("H") + "-" + j.toString() + "'></td> \
+					<td id='2-" + currHr.format("H") + "-" + j.toString() + "'></td> \
+					<td id='3-" + currHr.format("H") + "-" + j.toString() + "'></td> \
+					<td id='4-" + currHr.format("H") + "-" + j.toString() + "'></td> \
+					<td id='5-" + currHr.format("H") + "-" + j.toString() + "'></td> \
+					<td id='6-" + currHr.format("H") + "-" + j.toString() + "'></td> \
+					</tr>";
+			
+			if(j == 3) currHr = moment(currHr).add(2, "hours");
+		}
+	}
+	
+	html += "</tbody></table>";
+	$("#viewEvents").html(html);
+}
+
 $(document).ready(function() {
 	connect();
+	generateCalendar();
 	refreshCalendar(calendar);
 	populateAddEvent();
 });

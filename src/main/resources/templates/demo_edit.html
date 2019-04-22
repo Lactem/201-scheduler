@@ -12,7 +12,7 @@
     	var calendar = /*[[${calendar}]]*/ null;
     	var ROUTE = /*[[${ROUTE}]]*/ 'http://localhost:8080';
     </script>
-    <script th:src="@{/edit.js}"></script>
+    <script th:src="@{/editDemo.js}"></script>
 </head>
 <body>
 <noscript><h2 style="color: #ff0000">Seems your browser doesn't support Javascript! Websocket relies on Javascript being
@@ -20,12 +20,10 @@
     Javascript and reload this page!</h2>
 </noscript>
 <a th:href="@{/}">Home</a><br />
-<label th:text="'User ID: ' + ${webVisitor.id}"></label><br />
-<label th:text="'You are editing the calendar named: ' + ${calendar.name}"></label><br />
-<label th:text="'Calendar id: ' + ${calendar.id}"></label><br />
+<label th:text="'You are editing the calendar named: Demo'"></label><br />
 
 <!-- JavaScript uses this div to display the calendar and edits from other users -->
-<div id="viewEvents"></div>
+<div id="displayCalendar"></div>
 
 <br /><br /><br />
 
