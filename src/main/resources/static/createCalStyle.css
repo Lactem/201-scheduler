@@ -15,10 +15,15 @@ h4 {
 	margin: none;
 }
 
+td {
+	vertical-align: top;
+}
+
 #generateCalendar {
 	float: right;
 	width: 80%;
 	margin-top: 0px;
+	vertical-align: top
 }
 
 #generateCalendar table{
