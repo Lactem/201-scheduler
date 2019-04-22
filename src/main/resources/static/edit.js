@@ -20,6 +20,7 @@ function connect() {
     });
 }
 
+
 function sendChanges() {
 	stompClient.send("/app/calendar/submitChanges", {}, JSON.stringify({'calendarId': calendar.id, 'updatedEvents': calendar.events}));
 }
@@ -293,8 +294,10 @@ function generateCalendar () {
 
 $(document).ready(function() {
 	connect();
+	
 	generateCalendar();
 	refreshCalendar(calendar);
+	
 	populateAddEvent();
 });
 
