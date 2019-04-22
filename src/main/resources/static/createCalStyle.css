@@ -15,16 +15,73 @@ h4 {
 	margin: none;
 }
 
+#generateCalendar {
+	float: right;
+	width: 80%;
+	margin-top: 0px;
+}
+
+#generateCalendar table{
+	font-family:sans-serif;
+	width: 90%;
+	border-spacing: 0;
+	border-collapse: separate;
+	table-layout: fixed;
+	margin-bottom: 50px;
+	background-color: white;
+	border:3px solid #cbcbcb;
+	border-right:0;
+	margin-left: 0px;
+}
+
+#generateCalendar table th{
+	border: 3px solid #cbcbcb;
+	border-top:0;
+	border-left:0;
+	padding:0.5em;
+}
+
+#generateCalendar td{
+	border-right:3px solid #cbcbcb;
+	text-align:center;
+	vertical-align: middle;
+	height: 16px;
+}
+
+
+
+#generateCalendar th:first-child{
+	border-top: 0;
+	border-bottom: 0;
+}
+
+
 #newCalendar {
 	border: 3px solid #cbcbcb; /*light grey*/
 	background-color: white;
-	margin-left: 20px;
+	margin-left: 40px;
 	margin-top: 20px;
+	margin-bottom: 20px;
+	margin-right: 10px;
 	padding-top: 20px;
 	padding-bottom: 40px;
 	padding-left: 40px;
 	padding-right: 40px;
-	width: 30%;
+	width: 100%;
+}
+
+.createSubmit {
+	padding-top: 10px;
+	color: white;
+	text-align: center;
+	margin-left: auto;
+	margin-right:auto;
+	padding-bottom: 10px;
+	padding-left: 10px;
+	padding-right: 10px;
+	font-size: 14px;
+	background: #ba8edd; /*light purple*/
+	border-radius: 30px;
 }
 
 

@@ -42,6 +42,48 @@ function connect() {
     });
 }
 
+function generateCalendar() {
+	var weekOf = moment().day(0);
+	var eventColors = ["#f49242", "#f441b2", "#7cf441", "#70cdf4", "#c97df2", "#f28a8f", "#f75960", "#f7ec88", "#8e8af7", "#fcb58f"];
+	var daysOfWeek = ["Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"];
+	var datesOfWeek = [weekOf.day(0).format("D"), weekOf.day(1).format("D"), weekOf.day(2).format("D"), weekOf.day(3).format("D"), weekOf.day(4).format("D"), weekOf.day(5).format("D"), weekOf.day(6).format("D")];
+	var html = "<p class='weekOf' style='font-size: 20px; font-weight: bold'> Week of " + weekOf.day(0).format("MMM DD, YYYY") + "</p><br><table><thead><tr><th></th>"; //<tbody>
+	
+	for(var i = 0; i < 7; i++) {
+		var day = i+1;
+		html += "<th><span id='date" + i + "' class='day'>" +  datesOfWeek[i] + "</span> \
+				<span class='short'>" + daysOfWeek[i] + "<br><br></span></th>";
+	}
+	
+	html += "</tr></thead><tbody>";
+	
+	var currHr = moment("2018-01-01T08:00:00");
+	
+	for(var i = 0; i < 8; i++) {
+		for(var j = 0; j < 4; j++) {
+			html += "<tr>";
+			if(j==0) {
+				html += "<td id = '" + currHr.format("HH:mm") + "' class='hour' rowspan='4'> \
+						<span>" + currHr.format("h:mm a") + "</span></td>";
+			}
+						
+			
+			html += "<td id='0-" + currHr.format("H") + "-" + j.toString() + "'></td> \
+					<td id='1-" + currHr.format("H") + "-" + j.toString() + "'></td> \
+					<td id='2-" + currHr.format("H") + "-" + j.toString() + "'></td> \
+					<td id='3-" + currHr.format("H") + "-" + j.toString() + "'></td> \
+					<td id='4-" + currHr.format("H") + "-" + j.toString() + "'></td> \
+					<td id='5-" + currHr.format("H") + "-" + j.toString() + "'></td> \
+					<td id='6-" + currHr.format("H") + "-" + j.toString() + "'></td> \
+					</tr>";
+			
+			if(j == 3) currHr = moment(currHr).add(2, "hours");
+		}
+	}
+	html += "</tbody></table>";
+	$("#generateCalendar").html(html);
+}
+
 // Sends the fields from an event's div to the server to make sure they contain valid values
 function validateEvent(div) {
 	var eventData = 
@@ -72,11 +114,11 @@ function sendNewCalendar() {
 
 $(document).ready(function() {
 	connect();
-	
 	// Get the current week
 	var today = moment();
 	var weekOf = today.startOf('week').isoWeekday(1);
 	var weekOfStr = weekOf.format('M/D/YYYY');
+	generateCalendar();
 	$("#weekOf").val(weekOfStr);
 });
 
