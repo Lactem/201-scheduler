@@ -41,6 +41,22 @@ h4 {
 	
 }
 
+.conflict {
+	background: #f96e5c;
+	margin: 10px;
+	border-radius: 10px;
+	padding: 20px;
+	float: center;
+	width: 40%;
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+}
+
+.conflictsWith {
+	font-weight: bold;
+}
+
 #checkConflicts {
 	float: right;
 	margin: 40px;

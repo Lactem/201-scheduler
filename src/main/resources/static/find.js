@@ -32,15 +32,15 @@ function updateView(events) {
 	for (var i = 0; i < events.length -1; i+=2) { //every two events are a conflict
 		event = events[i];
 		event2 = events[i+1];
-		html += "<tr> \
-			<td>" + event.title + "</td> \
-			<td>" + event.start + " - </td> \
-			<td>" + event.end + "</td> \
-			<td> | Conflicts With | </td> \
-			<td>" + event2.title + "</td> \
-			<td>" + event2.start + " - </td> \
-			<td>" + event2.end + "</td> \
-		</tr>";
+		html += "<div class='conflict'>" + event.title + ": "
+			+ moment(event.start).format("MMM DD, YYYY") + " at "
+			+ moment(event.start).format("h:mm a") + " - "
+			+ moment(event.end).format("h:mm a") + 
+			 "<br><span class='conflictsWith'>   conflicts with </span><br>"
+			+ event2.title + ": "
+			+ moment(event2.start).format("MMM DD, YYYY") + " at "
+			+ moment(event2.start).format("h:mm a") + " - "
+			+ moment(event2.end).format("h:mm a") + "</div><br>";
 	}
 	
 	html +=	"</tbody></table><br>";

@@ -56,12 +56,18 @@ $(document).ready( function() {
 	$("#indexCalendar").html(html);
 
 	if(visitorLoggedIn == "true") {
-		clearCalendar();
+		$("#indexCalendar").click(function() {
+			var go_to_url = "http://localhost:8080/calendar/new";
+			document.location.href = go_to_url;
+		})
 		$("#indexCalendar").find("table").css("width", "90%");
 	}
 	
 	if(visitorLoggedIn == "false") {
-		console.log("VISITOR NOT LOGGED IN");
+		$("#indexCalendar").click(function() {
+			var go_to_url = "http://localhost:8080/editDemo";
+			document.location.href = go_to_url;
+		})
 		for(var i = 1; i <= 5; i += 2) {
 			$("#" + i.toString() + "-8-3").html("Band<br>8:00 am-10:00 am<br>");
 			$("#" + i.toString() + "-8-3").css("border-top-left-radius", "10px");
@@ -92,7 +98,6 @@ $(document).ready( function() {
 $(document).on('load', function() {
 	var visitorLoggedIn = document.getElementById("visitorLoggedIn").value;
 	if(visitorLoggedIn == 'true') {
-		clearCalendar();
 		$("#indexCalendar").find("table").css("width", "90%");
 	}
 });
@@ -100,8 +105,7 @@ $(document).on('load', function() {
 $(document).on('submit', function() {
 	var visitorLoggedIn = document.getElementById("visitorLoggedIn").value;
 	if(visitorLoggedIn == 'true') {
-		clearCalendar();
-		//$("#indexCalendar").find("table").css("width", "90%");
+		$("#indexCalendar").find("table").css("width", "90%");
 	}
 });
 
