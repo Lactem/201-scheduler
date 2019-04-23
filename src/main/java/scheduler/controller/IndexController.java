@@ -51,6 +51,7 @@ public class IndexController {
 		if (webVisitor.getGuestCalendarId() == null || webVisitor.getGuestCalendarId().trim().isEmpty()) {
 			calendar = new Calendar();
 			calendar.setId("guest_" + RandomStringUtils.randomAlphanumeric(16));
+			webVisitor.setGuestCalendarId(calendar.getId());
 			calendar.setName("Demo Calendar");
 			calendar.setEditorEmails(new ArrayList<>());
 			calendar.setEvents(new ArrayList<>());
