@@ -20,13 +20,16 @@
     		}
     	}
     </script>
+    <script th:inline="javascript">
+    	var webVisitor = /*[[${webVisitor}]]*/ null;
+    	var ROUTE = /*[[${ROUTE}]]*/ 'http://localhost:8080';
+    </script>
     <script th:src="@{/index.js}"></script>
 </head>
 <body>
 	<div id="homePage" class="homePage">
 		<!-- <a th:href="@{/}">Home</a><br /> -->
 		<label th:text="'User ID: ' + ${webVisitor.id}"></label>
-    	<p th:text="'Welcome to the homepage of 201-scheduler, ' + ${name} + '!'" />
 	</div>
 	
     <!-- REGISTER DEMO -->
@@ -42,8 +45,6 @@
 	    </form>
 	    <p style="font-size:12px; text-align:center;">Already have an account? Log in <a href="#" onclick="swapRegLogin();">here!</a></p>
     </div>
-    
-   <input type='hidden' name='hidden' id='visitorLoggedIn' th:value="${webVisitor.loggedIn}">
     
     <br />
     <p th:if="${registerErr}">Error logging in: <span th:text="${registerErr}"></span></p>

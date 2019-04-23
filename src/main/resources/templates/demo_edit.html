@@ -9,8 +9,18 @@
     <script src="/webjars/momentjs/moment.js"></script>
     
     <script th:inline="javascript">
-    	var calendar = /*[[${calendar}]]*/ null;
+    	var webVisitor = /*[[${webVisitor}]]*/ null;
+    	var calendar = /*[[${guestCalendar}]]*/ null;
     	var ROUTE = /*[[${ROUTE}]]*/ 'http://localhost:8080';
+    	window.onclick = function(event) {
+    		if(event.target == modal) {
+    			$("#modal").hide();
+    		}
+    	}
+
+    	close.onclick = function() {
+    		$("#modal").hide();
+    	}
     </script>
     <script th:src="@{/editDemo.js}"></script>
 </head>
@@ -20,18 +30,29 @@
     Javascript and reload this page!</h2>
 </noscript>
 <a th:href="@{/}">Home</a><br />
-<label th:text="'You are editing the calendar named: Demo'"></label><br />
+<label th:text="'User ID: ' + ${webVisitor.id}"></label><br />
 
-<!-- JavaScript uses this div to display the calendar and edits from other users -->
-<div id="displayCalendar"></div>
+<!-- JavaScript uses this div to display calendar event edits -->
+<table>
+	<tr>
+		<td style="width: 70%">
+			<div id="viewEvents"></div>
+		</td>
+	
+	
+		<!-- JavaScript uses this div to add a new event -->
+		<td>
+			<div id="addEvent"></div>
+		</td>
+	</tr>
+</table>
 
 <br /><br /><br />
 
 <!-- JavaScript uses this div to edit an event -->
-<div id="editEvent"></div>
-
-<!-- JavaScript uses this div to add a new event -->
-<div id="addEvent"></div>
+<div id='modal' class='modal'>
+	<div id="editEvent"></div>
+</div>
 
 </body>
 </html>

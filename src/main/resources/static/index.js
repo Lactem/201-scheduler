@@ -12,8 +12,6 @@ function clearCalendar() {
 }
 
 $(document).ready( function() {
-	var visitorLoggedIn = document.getElementById("visitorLoggedIn").value;
-	console.log(visitorLoggedIn);
 	var weekOf = moment("2019-04-22", "YYYY-MM-DD");
 	var eventColors = ["#f49242", "#f441b2", "#7cf441", "#70cdf4", "#c97df2", "#f28a8f", "#f75960", "#f7ec88", "#8e8af7", "#fcb58f"];
 	var daysOfWeek = ["Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"];
@@ -55,17 +53,17 @@ $(document).ready( function() {
 	html += "</tbody></table>";
 	$("#indexCalendar").html(html);
 
-	if(visitorLoggedIn == "true") {
+	if(webVisitor.loggedIn) {
 		$("#indexCalendar").click(function() {
-			var go_to_url = "http://localhost:8080/calendar/new";
+			var go_to_url = ROUTE + "/calendar/new";
 			document.location.href = go_to_url;
 		})
 		$("#indexCalendar").find("table").css("width", "90%");
 	}
 	
-	if(visitorLoggedIn == "false") {
+	if(!webVisitor.loggedIn) {
 		$("#indexCalendar").click(function() {
-			var go_to_url = "http://localhost:8080/editDemo";
+			var go_to_url = ROUTE + "/editDemo";
 			document.location.href = go_to_url;
 		})
 		for(var i = 1; i <= 5; i += 2) {
@@ -91,20 +89,17 @@ $(document).ready( function() {
 			$("#" + i.toString() + "-16-3").css("border-bottom-right-radius", "10px");
 		}
 	}
-	console.log(visitorLoggedIn);
 	
 });
 
 $(document).on('load', function() {
-	var visitorLoggedIn = document.getElementById("visitorLoggedIn").value;
-	if(visitorLoggedIn == 'true') {
+	if(webVisitor.loggedIn) {
 		$("#indexCalendar").find("table").css("width", "90%");
 	}
 });
 
 $(document).on('submit', function() {
-	var visitorLoggedIn = document.getElementById("visitorLoggedIn").value;
-	if(visitorLoggedIn == 'true') {
+	if(webVisitor.loggedIn) {
 		$("#indexCalendar").find("table").css("width", "90%");
 	}
 });

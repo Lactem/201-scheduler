@@ -142,8 +142,6 @@ public class CalendarController {
 		return "edit_calendar";
 	}
 	
-	
-	
 	/**
 	 * Listens for a STOMP message to validate a calendar event.
 	 */
