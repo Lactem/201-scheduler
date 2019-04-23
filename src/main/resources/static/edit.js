@@ -37,6 +37,10 @@ function clearCalendar() {
 				$(curSelector).css("border-top-right-radius", "0px");
 				$(curSelector).css("border-bottom-left-radius", "0px");
 				$(curSelector).css("border-bottom-right-radius", "0px");
+				$(curSelector).css("border-top", "");
+				$(curSelector).css("border-bottom", "");
+				$(curSelector).css("border-left", "");
+				$(curSelector).css("border-right", "");
 			}
 		}
 	}
@@ -90,6 +94,7 @@ function refreshCalendar(updatedCalendar) {
 				+ startTime + "-" + endTime);
 		$(dayOfHourIDTag).css("border-top-left-radius", "10px");
 		$(dayOfHourIDTag).css("border-top-right-radius", "10px");
+		$(dayOfHourIDTag).css("border-top", "3px solid white");
 		
 		for(curTime = startTimeInt; curTime < endTimeInt; curTime += 2) {
 			var curSelector0 = "#" + eventDayOfWeek + "-" + curTime.toString() + "-0";
@@ -98,15 +103,23 @@ function refreshCalendar(updatedCalendar) {
 			var curSelector3 = "#" + eventDayOfWeek + "-" + curTime.toString() + "-3";
 			
 			$(curSelector0).css("background-color", eventColor);
+			$(curSelector0).css("border-left", "3px solid white");
+			$(curSelector0).css("border-right", "3px solid white");
 			$(curSelector0).attr('onClick', 'editEvent(' + eventIndex + ');');
 			
 			$(curSelector1).css("background-color", eventColor);
+			$(curSelector1).css("border-left", "3px solid white");
+			$(curSelector1).css("border-right", "3px solid white");
 			$(curSelector1).attr('onClick', 'editEvent(' + eventIndex + ');');
 			
 			$(curSelector2).css("background-color", eventColor);
+			$(curSelector2).css("border-left", "3px solid white");
+			$(curSelector2).css("border-right", "3px solid white");
 			$(curSelector2).attr('onClick', 'editEvent(' + eventIndex + ');');
 			
 			$(curSelector3).css("background-color", eventColor);
+			$(curSelector3).css("border-left", "3px solid white");
+			$(curSelector3).css("border-right", "3px solid white");
 			$(curSelector3).attr('onClick', 'editEvent(' + eventIndex + ');');
 			$(curSelector3).css("border-bottom-left-radius", "0px");
 			$(curSelector3).css("border-bottom-right-radius", "0px");
@@ -114,6 +127,7 @@ function refreshCalendar(updatedCalendar) {
 			if(curTime == endTimeInt - 2) {
 				$(curSelector3).css("border-bottom-left-radius", "10px");
 				$(curSelector3).css("border-bottom-right-radius", "10px");
+				$(curSelector3).css("border-bottom", "3px solid white");
 			}
 		}
 		console.log(endTimeInt);
