@@ -24,6 +24,7 @@ import org.springframework.web.client.RestTemplate;
 import scheduler.WebVisitor;
 import scheduler.controller.calendar.message.CreateMessage;
 import scheduler.controller.calendar.message.CreateMessageResponse;
+import scheduler.controller.calendar.message.FindMessage;
 import scheduler.controller.calendar.message.FindMessageResponse;
 import scheduler.controller.calendar.message.ShareMessage;
 import scheduler.controller.calendar.message.ShareMessageResponse;

@@ -18,6 +18,9 @@ h4 {
 	margin: none;
 }
 
+a { text-decoration: none; color:green; }
+a:visited { text-decoration: none; color:green; }
+
 #viewEvents {
 	border: 3px solid #cbcbcb; /*light grey*/
 	background-color: white;

@@ -1,4 +1,4 @@
-package scheduler.controller.calendar;
+package scheduler.controller.calendar.message;
 
 import java.util.List;
 

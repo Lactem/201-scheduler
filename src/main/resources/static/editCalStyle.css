@@ -15,6 +15,9 @@ h4 {
 	margin: none;
 }
 
+a { text-decoration: none; color:green; }
+a:visited { text-decoration: none; color:green; }
+
 #blockContainer {
 	diplay: flex;
 	justify-content: center;

@@ -19,6 +19,9 @@ td {
 	vertical-align: top;
 }
 
+a { text-decoration: none; color:green; }
+a:visited { text-decoration: none; color:green; }
+
 #generateCalendar {
 	float: right;
 	width: 80%;

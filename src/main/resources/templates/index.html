@@ -27,9 +27,8 @@
     <script th:src="@{/index.js}"></script>
 </head>
 <body>
+<a th:href="@{/}"><b>201-Scheduler</b></a><br /><br />
 	<div id="homePage" class="homePage">
-		<!-- <a th:href="@{/}">Home</a><br /> -->
-		<!--  <label th:text="'User ID: ' + ${webVisitor.id}"></label> -->
 	</div>
 	
     <!-- REGISTER DEMO -->
@@ -64,7 +63,6 @@
     </div>
 
     <p th:if="${loginErr}">Error logging in: <span th:text="${loginErr}"></span></p>
-    <p id="loggedInID" th:if="${webVisitor.loggedIn}">You're logged in as <span th:text="${webVisitor.user.email}"></span></p>
     <!-- END LOGIN DEMO -->
     
     
@@ -75,7 +73,7 @@
 	    	<input type="text" style="width: 250px;" id="findCal" name="calendarName"/>
 	    	<input id="findCalendarSubmit" type="submit" value="Find Calendar" />
 	    	<!-- CREATE CALENDAR DEMO -->
-	    		<a class="createCalendar" th:href="@{/calendar/new}" style="text-decoration: none;">Create New Calendar</a>
+	    		<a class="createCalendar" th:href="@{/calendar/new}" style="text-decoration: none; color: white;">Create New Calendar</a>
     		<!-- END CREATE CALENDAR DEMO -->
 	    </form>
 	</div>
