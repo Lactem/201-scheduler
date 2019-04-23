@@ -70,7 +70,7 @@ public class UserController {
 		
 		// If the user had a guest Calendar previously, it can now be saved permanently
 		if (webVisitor.getGuestCalendarId() != null && !webVisitor.getGuestCalendarId().trim().isEmpty()) {
-			restTemplate.put(routingService.getRoute() + "/api/calendar/updateOwner/" + webVisitor.getGuestCalendarId(), webVisitor.getUser().getEmail());
+			restTemplate.put(routingService.getRoute() + "/api/calendar/updateOwner/" + webVisitor.getGuestCalendarId(), email);
 			webVisitor.setGuestCalendarId(null);
 		}
 		

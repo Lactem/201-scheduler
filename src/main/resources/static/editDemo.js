@@ -237,7 +237,7 @@ function populateAddEvent() {
 }
 
 function generateCalendar () {
-	var weekOf = moment("2019-04-15", "YYYY-MM-DD");
+	var weekOf = moment();
 	if(calendar.events.length != 0) weekOf = moment(calendar.events[0].weekOf);
 	var daysOfWeek = ["Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"];
 	var datesOfWeek = [weekOf.day(0).format("D"), weekOf.day(1).format("D"), weekOf.day(2).format("D"), weekOf.day(3).format("D"), weekOf.day(4).format("D"), weekOf.day(5).format("D"), weekOf.day(6).format("D")];
