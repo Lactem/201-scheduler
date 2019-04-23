@@ -97,9 +97,13 @@ input[type="submit"] {
 	float: right;
 	border-radius: 25px;
 	padding: 40px;
-	margin-top: 30px;
+	margin-top: 180px;
 	margin-bottom: 30px;
 	margin-right: 40px;
+}
+
+#loggedInID {
+	margin-left: 40px;
 }
 
 #login {

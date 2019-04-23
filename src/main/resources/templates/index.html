@@ -29,11 +29,11 @@
 <body>
 	<div id="homePage" class="homePage">
 		<!-- <a th:href="@{/}">Home</a><br /> -->
-		<label th:text="'User ID: ' + ${webVisitor.id}"></label>
+		<!--  <label th:text="'User ID: ' + ${webVisitor.id}"></label> -->
 	</div>
 	
     <!-- REGISTER DEMO -->
-    <br /><br /><br />
+    <!--  <br /><br /><br /> -->
     <div th:if="${webVisitor.loggedIn == false}" id="register" class = "loginRegister">
 	    <h4>Sign Up! It's Free!</h4><br/>
 	    <form action="/user/register" method="POST">
@@ -52,7 +52,6 @@
     
     
     <!-- LOGIN DEMO -->
-    <br /><br />
     <div th:if="${webVisitor.loggedIn == false}" id="login" class="loginRegister">
 	    <h4>Log In</h4><br/>
 	    <form action="/user/login" method="POST">
@@ -63,14 +62,9 @@
 	    </form>
 	    <p style="font-size:12px; text-align: center;">Don't have an account? Register <a href="#" onclick="swapRegLogin();">here!</a></p>
     </div>
-    
-    <div th:if="${webVisitor.loggedIn}" id="signout" class="signout">
-    	Sign Out
-    </div>
-    
-    <br/>
+
     <p th:if="${loginErr}">Error logging in: <span th:text="${loginErr}"></span></p>
-    <p th:if="${webVisitor.loggedIn}">You're logged in as <span th:text="${webVisitor.user.email}"></span></p>
+    <p id="loggedInID" th:if="${webVisitor.loggedIn}">You're logged in as <span th:text="${webVisitor.user.email}"></span></p>
     <!-- END LOGIN DEMO -->
     
     

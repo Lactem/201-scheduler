@@ -27,6 +27,11 @@ h4 {
 	width: 30%;
 }
 
+#selectCalTitle {
+	font-size: 24px;
+	padding-left: 30px;
+}
+
 .selectCal {
 	border: 1px solid #55CC87; /*green*/
 	background: #55CC87;

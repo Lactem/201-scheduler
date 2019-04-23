@@ -50,7 +50,7 @@ function updateView(events) {
 function populateControls() {
 	
 	// Display the user's calendars and select a default
-	var html = "<b><label>Select Calendar</label><br></b>";
+	var html = "<br><b><label id=\"selectCalTitle\">Select Calendar</label><br></b>";
 	for (i in allCalendars) {
 		calendar = allCalendars[i];
 		html += "<br><div class='selectCal'><input type='checkbox' name='calendar' value='" + calendar.id + "' />" + calendar.name + "<br />";
