@@ -73,7 +73,7 @@ public class CalendarRestController {
 	Calendar findCalendar(@PathVariable String id) {
 		return calendarRepo.findAll().stream()
 				.filter(calendar -> calendar != null && calendar.getId().equals(id))
-				.findFirst().get();
+				.findFirst().orElse(null);
 	}
 	
 	/**
@@ -109,6 +109,20 @@ public class CalendarRestController {
 			.map(calendar -> {
 				if (calendar == null) return null;
 				calendar.setEvents(events);
+				return calendarRepo.save(calendar);
+			});
+	}
+	
+	/**
+	 * Updates the owner email a calendar with the given identifier.
+	 */
+	@PutMapping("/api/calendar/updateOwner/{id}")
+	Optional<Calendar> updateOwner(@RequestBody String ownerEmail, @PathVariable String id) {
+		
+		return calendarRepo.findById(id)
+			.map(calendar -> {
+				if (calendar == null) return null;
+				calendar.setOwnerEmail(ownerEmail);
 				return calendarRepo.save(calendar);
 			});
 	}

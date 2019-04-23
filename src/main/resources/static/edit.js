@@ -20,11 +20,6 @@ function connect() {
     });
 }
 
-
-function sendChanges() {
-	stompClient.send("/app/calendar/submitChanges", {}, JSON.stringify({'calendarId': calendar.id, 'updatedEvents': calendar.events}));
-}
-
 function clearCalendar() {
 	for(var i = 0; i <= 7; i++) {
 		for(var j = 8; j < 24; j++) {
@@ -319,5 +314,4 @@ $(function () {
     $("form").on('submit', function (e) {
         e.preventDefault();
     });
-    $("#send").click(function() { sendChanges(); });
 });

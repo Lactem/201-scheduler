@@ -12,7 +12,6 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import scheduler.WebVisitor;
-import scheduler.data.Calendar;
 import scheduler.data.User;
 import scheduler.service.RoutingService;
 
@@ -70,12 +69,9 @@ public class UserController {
 		webVisitor.setUser(user);
 		
 		// If the user had a guest Calendar previously, it can now be saved permanently
-		if (webVisitor.getGuestCalendar() != null) {
-			Calendar calendar = webVisitor.getGuestCalendar();
-			calendar.setName("Calendar1");
-			calendar.setOwnerEmail(webVisitor.getUser().getEmail());
-			restTemplate.postForObject(routingService.getRoute() + "/api/calendar/new", calendar, Calendar.class);
-			webVisitor.setGuestCalendar(null);
+		if (webVisitor.getGuestCalendarId() != null && !webVisitor.getGuestCalendarId().trim().isEmpty()) {
+			restTemplate.put(routingService.getRoute() + "/api/calendar/updateOwner/" + webVisitor.getGuestCalendarId(), webVisitor.getUser().getEmail());
+			webVisitor.setGuestCalendarId(null);
 		}
 		
 		return "redirect:/index";
